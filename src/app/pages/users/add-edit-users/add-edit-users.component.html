@@ -1,0 +1,223 @@
+<div class="bg-white shadow rounded-none add-edit-agents">
+  <!-- Header -->
+  <div mat-dialog-title class="bg-gradient-to-r from-cyan-300 via-green-400 via-yellow-200 to-red-300 p-4 mb-0">
+    <div class="flex justify-between items-center mt-1">
+      <h2 class="text-lg font-semibold text-gray-800">
+        {{ data ? "Edit User" : "Add User" }}
+      </h2>
+      <button type="button" class="text-gray-600 hover:text-gray-800 font-bold" (click)="closeDialog()">
+        <i class="bi bi-x-lg text-lg text-white"></i>
+      </button>
+    </div>
+  </div>
+
+  <form [formGroup]="UserForm" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content>
+      <div class="flex">
+        <!-- Left: Photo -->
+        <!-- <div class="basis-3/12 p-2">
+          <div class="flex flex-col items-center gap-4">
+            <div
+              class="w-24 h-24 bg-gray-200 rounded-full flex text-4xl font-semibold items-center justify-center overflow-hidden"
+            >
+              <ng-container *ngIf="photoUrl; else initials">
+                <img
+                  [src]="photoUrl"
+                  alt="Agent Photo"
+                  class="object-cover w-full h-full"
+                />
+              </ng-container>
+              <ng-template #initials>
+                {{ getInitials(UserForm.value) }}
+              </ng-template>
+            </div>
+
+            <label
+              class="flex items-center justify-center bg-sky-500 hover:bg-sky-600 text-white text-sm w-32 py-2 rounded cursor-pointer"
+            >
+              Upload Photo
+              <input
+                type="file"
+                class="hidden"
+                accept="image/*"
+                (change)="onPhotoSelect($event)"
+              />
+            </label>
+          </div>
+        </div> -->
+
+        <div class="basis-3/12 p-2" *ngIf="!isEditMode">
+          <div class="flex flex-col items-center gap-4">
+            <div class="w-32 h-24 bg-gray-200 flex items-center justify-center overflow-hidden border border-gray-200">
+              <img *ngIf="photoUrl" [src]="photoUrl" alt="Agent Photo" class="object-inherit w-full h-full" />
+              <div *ngIf="!photoUrl" class="text-gray-400 text-sm">
+                No Photo
+              </div>
+            </div>
+
+            <div class="flex flex-col items-center justify-center gap-2">
+              <!-- Upload Button -->
+              <label
+                class="flex items-center justify-center bg-sky-500 hover:bg-sky-600 text-white text-sm w-32 py-2 rounded cursor-pointer">
+                {{ !photoUrl ? "Upload" : "Change" }} Photo
+                <input type="file" class="hidden" accept=".jpg,.jpeg,.png,.gif" (change)="onPhotoSelect($event)" />
+              </label>
+
+              <!-- Remove Button -->
+              <button *ngIf="photoUrl" type="button"
+                class="flex items-center justify-center gap-1 bg-red-500 hover:bg-red-600 text-white text-sm w-32 py-2 rounded"
+                (click)="removePhoto()">
+                <i class="bi bi-trash"></i>
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Form Fields -->
+        <div class="basis-9/12 p-2">
+          <div class="space-y-5">
+            <!-- User Name -->
+            <div>
+              <label class="block text-gray-700 text-sm font-semibold mb-1 flex">
+                User ID <span class="text-[#e15050] text-[22px]">*</span>
+              </label>
+              <input formControlName="userId" type="email" placeholder="User ID"
+                class="w-full border border-[#CAD5E2] rounded-full px-3 py-2 focus:ring-1 focus:ring-[#CAD5E2] outline-none" />
+              <div *ngIf="
+                  UserForm.get('userId')?.touched &&
+                  UserForm.get('userId')?.hasError('required')
+                " class="text-left font-semibold">
+                <span class="invalid-msg">User ID is required</span>
+              </div>
+            </div>
+
+            <!-- Nick Name -->
+            <div>
+              <label class="block text-gray-700 text-sm font-semibold mb-1 flex">
+                User Name <span class="text-[#e15050] text-[22px]">*</span>
+              </label>
+              <input formControlName="userName" type="text" placeholder="User Name"
+                class="w-full border border-[#CAD5E2] rounded-full px-3 py-2 focus:ring-1 focus:ring-[#CAD5E2] outline-none" />
+              <div *ngIf="
+                  UserForm.get('userName')?.touched &&
+                  UserForm.get('userName')?.hasError('required')
+                " class="text-left font-semibold">
+                <span class="invalid-msg">User Name is required</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-gray-700 text-sm font-semibold mb-1 flex">
+                User Email <span class="text-[#e15050] text-[22px]">*</span>
+              </label>
+              <input formControlName="email" type="email" placeholder="User Name"
+                class="w-full border border-[#CAD5E2] rounded-full px-3 py-2 focus:ring-1 focus:ring-[#CAD5E2] outline-none" />
+              <div *ngIf="
+                  UserForm.get('email')?.touched &&
+                  UserForm.get('email')?.hasError('required')
+                " class="text-left font-semibold">
+                <span class="invalid-msg">User Email is required</span>
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div>
+              <label class="block text-gray-700 text-sm font-semibold mb-1 flex">
+                Password <span class="text-[#e15050] text-[22px]">*</span>
+              </label>
+              <input formControlName="password" type="password" placeholder="Password"
+                class="w-full border border-[#CAD5E2] rounded-full px-3 py-2 focus:ring-1 focus:ring-[#CAD5E2] outline-none" />
+              <div *ngIf="
+                  UserForm.get('password')?.touched &&
+                  UserForm.get('password')?.hasError('required')
+                " class="text-left font-semibold">
+                <span class="invalid-msg"> Password is required</span>
+              </div>
+            </div>
+
+            <!-- Mobile -->
+            <div>
+              <label class="text-gray-700 text-sm"> </label>
+              <label class="block text-gray-700 text-sm font-semibold mb-1 flex">
+                Mobile <span class="text-[#e15050] text-[22px]">*</span>
+              </label>
+              <div class="flex gap-2 relative mt-1">
+                <div class="w-1/2">
+                  <mat-select formControlName="country"
+                    class="!rounded-full !border !border-[#CAD5E2] !px-4 !py-2 !text-sm !text-gray-700 custom-select"
+                    disableRipple>
+                    @for (country of countries; track country) {
+                    <mat-option [value]="country.name">
+                      ({{ country.phoneCode }}) {{ country.name }}
+                    </mat-option>
+                    }
+                  </mat-select>
+                </div>
+
+
+                <div class="w-2/3">
+                  <input maxlength="20" type="tel" placeholder="Mobile Number" formControlName="mobile"
+                    class="w-full px-5 py-2 outline-none text-gray-700 text-sm border border-[#CAD5E2] rounded-full" />
+                </div>
+              </div>
+              <div *ngIf="
+                  UserForm.get('mobile')?.touched &&
+                  UserForm.get('mobile')?.hasError('required')
+                " class="text-left font-semibold">
+                <span class="invalid-msg"> Mobile number is required</span>
+              </div>
+            </div>
+
+            <!-- Role -->
+            <div>
+              <label class="block text-gray-700 text-sm font-semibold mb-1 flex">
+                Role <span class="text-[#e15050] text-[22px]">*</span>
+              </label>
+              <div class="flex items-center gap-4">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" value="administrator" formControlName="role" class="w-5 h-5" />
+                  <span>Administrator</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" value="supervisor" formControlName="role" class="w-5 h-5" />
+                  <span>Supervisor</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" value="agent" formControlName="role" class="w-5 h-5" />
+                  <span>Agent</span>
+                </label>
+              </div>
+              <div *ngIf="
+                  UserForm.get('role')?.touched &&
+                  UserForm.get('role')?.hasError('required')
+                " class="text-left font-semibold">
+                <span class="invalid-msg">Role selection is required</span>
+              </div>
+            </div>
+
+            <!-- Active Toggle (Optional) -->
+            <div class="m-0">
+              <div class="flex items-center justify-between w-full font-bold">
+                <mat-slide-toggle style="margin-bottom: 32px;" formControlName="active" color="primary"
+                  (change)="onToggleChange($event)">
+                  {{ UserForm.get("active")?.value ? "Active" : "Inactive" }}
+                </mat-slide-toggle>
+
+                <div *ngIf="formSubmitted && UserForm.invalid" class="font-semibold invalid-msg text-right"
+                  style="margin-top: 55px">
+                  Please fill all required fields before saving.
+                </div>
+
+                <button style="margin-top: 52px" type="submit"
+                  class="bg-sky-500 hover:bg-sky-600 text-white px-6 py-2 rounded-md font-normal">
+                  {{ data ? "Update" : "Save" }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

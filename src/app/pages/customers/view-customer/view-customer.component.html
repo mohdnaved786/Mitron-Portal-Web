@@ -1,0 +1,124 @@
+<section class="max-w-4xl mx-auto px-4">
+  <!-- Header -->
+  <div class="flex items-center justify-between px-6 py-4 border-b">
+    <button class="flex items-center gap-3" routerLink="/customers">
+      <i class="bi bi-arrow-left text-[#000]]"></i>
+      <span class="text-[#62748E] text-xs font-semibold">GO BACK</span>
+    </button>
+
+    <div class="flex flex-col items-center">
+      <!-- <img [src]="customer?.profile_image || 'https://i.pravatar.cc/100'" alt="customer" class="w-24 h-24 rounded-full " /> -->
+      <div
+        class="w-[5rem] h-[5rem] rounded-full overflow-hidden bg-gray-200 flex items-center justify-center text-xl font-semibold text-gray-700"
+      >
+        <ng-container *ngIf="customer?.profile_image; else headerInitials">
+          <img
+            [src]="customer.profile_image"
+            alt="customer"
+            class="w-full h-full object-cover"
+          />
+        </ng-container>
+        <ng-template #headerInitials>
+          {{ getInitials(customer.name) }}
+        </ng-template>
+      </div>
+
+      <h1 class="mt-2 text-xl font-semibold">
+        {{ customer?.name }} {{ customer?.last_name }}
+      </h1>
+      <div class="flex space-x-4 text-sm text-gray-900 mt-1">
+        <div class="flex items-center space-x-1">
+          <span class="material-icons text-base">call</span>
+          <span>{{ customer?.mobile || "N/A" }}</span>
+        </div>
+        <span>|</span>
+        <div class="flex items-center space-x-1">
+          <span class="material-icons text-base">email</span>
+          <span>{{ customer?.email || "N/A" }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <!-- Active toggle -->
+      <!-- <label class="inline-flex relative items-center cursor-pointer">
+                <input type="checkbox" value="" class="sr-only peer" />
+                <div
+                    class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-500 transition-all duration-300">
+                </div>
+                <span class="ml-3 text-sm font-medium text-gray-900">Active</span>
+            </label> -->
+
+      <div class="w-[150px] flex justify-end items-center">
+        <mat-slide-toggle
+          [checked]="isActive"
+          (change)="onToggleChange($event)"
+          class="flex-row-reverse"
+          [ngClass]="{
+            'active-toggle': isActive,
+            'inactive-toggle': !isActive
+          }"
+        >
+          <!-- fixed-width label prevents layout shift -->
+          <span
+            class="inline-block w-[70px] text-center text-black font-medium whitespace-nowrap"
+          >
+            {{ isActive ? "Active" : "Inactive" }}
+          </span>
+        </mat-slide-toggle>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Bar -->
+  <div
+    class="flex flex-wrap justify-between px-6 py-4 my-4 mb-8 bg-[#F1F5F9] text-center rounded-[16px] text-gray-800 shadow-md"
+  >
+    <div class="flex-1 py-2 border-r border-gray-300">
+      <h2 class="text-xs uppercase text-[#62748E]">Assigned Agent</h2>
+      <p class="font-semibold text-lg">Not Assigned</p>
+    </div>
+    <div class="flex-1 py-2 border-r border-gray-300">
+      <h2 class="text-xs uppercase text-[#62748E]">Member Since</h2>
+      <p class="font-semibold text-lg">Today</p>
+    </div>
+    <div class="flex-1 py-2 border-r border-gray-300">
+      <h2 class="text-xs uppercase text-[#62748E]">Birthday</h2>
+      <p class="font-semibold text-lg">Apr 21, 2000</p>
+    </div>
+    <div class="flex-1 py-2">
+      <h2 class="text-xs uppercase text-[#62748E]">Anniversary</h2>
+      <p class="font-semibold text-lg">Mar 28, 2020</p>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="pe-6 border-b border-[#CAD5E2]">
+    <nav class="flex space-x-4 text-sm font-medium text-gray-600">
+      <button
+        *ngFor="let tab of tabs"
+        (click)="setActiveTab(tab)"
+        [ngClass]="{
+          'border-b-2  border-gray-500 text-black font-semibold':
+            activeTab === tab,
+          'hover:text-gray-900': activeTab !== tab
+        }"
+        class="pb-2 focus:outline-none"
+      >
+        {{ tab.name }}
+      </button>
+    </nav>
+  </div>
+
+  <!-- Content -->
+  <div class="py-6">
+    <app-customer-view-agent
+      *ngIf="activeTab.component === 'agent'"
+    ></app-customer-view-agent>
+    <app-chat-history *ngIf="activeTab.component === 'chat'"></app-chat-history>
+
+    <div *ngIf="activeTab.component === 'performance'">
+        Dashboard of Agent 1
+    </div>
+  </div>
+</section>

@@ -1,0 +1,441 @@
+<!-- <div class="p-6 bg-gray-100 min-h-screen ">
+
+    <div class="flex mx-auto justify-center gap-7">
+        <div class="basis-8/12">
+            <!-- Top Cards --
+            <div class="grid grid-cols-4 gap-4 mb-6 dashbord-top-4box ">
+                <!-- Total Agents --
+                <div class="dashbord-top-4boxes shadow-md rounded-2xl p-2 poppins">
+                    <div class="bg-white rounded-2xl px-10 py-12">
+                        <h3 class="text-center text-sm font-semibold text-gray-600">
+                            TOTAL AGENTS
+                        </h3>
+                        <p class="text-4xl font-normal text-center mt-2">
+                            {{ dashboardData?.agents.total }}
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-around mt-5">
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <p class="font-medium rounded-md status-online">
+                                ONLINE
+
+                            </p>
+                            <span class="text-4xl">
+                                {{ dashboardData?.agents.online }}
+                            </span>
+                        </div>
+
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <p class="font-medium rounded-md status-offline">
+                                OFFLINE
+                            </p>
+                            <span class="text-4xl">{{ dashboardData?.agents.offline }}</span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Total Customers --
+                <div class="dashbord-top-4boxes shadow-md rounded-2xl p-2 poppins">
+                    <div class="bg-white rounded-2xl px-10 py-12">
+                        <h3 class="text-center text-sm font-semibold text-gray-600">
+                            TOTAL CUSTOMERS
+                        </h3>
+                        <p class="text-4xl font-normal text-center mt-2">
+                            {{ dashboardData?.customers.total }}
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-around mt-5">
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <p class="font-medium rounded-md status-online">
+                                Active
+
+                            </p>
+                            <span class="text-4xl">
+                                {{ dashboardData?.customers.active }}
+                            </span>
+                        </div>
+
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <p class="font-medium rounded-md status-offline">
+                                Inactive
+                            </p>
+                            <span class="text-4xl">{{ dashboardData?.customers.inactive }}</span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Today Messages --
+                <div class="dashbord-top-4boxes shadow-md rounded-2xl p-2 poppins">
+                    <div class="bg-white rounded-2xl px-10 py-12">
+                        <h3 class="text-center text-sm font-semibold text-gray-600">
+                            TOTAL Messages
+                        </h3>
+                        <p class="text-4xl font-normal text-center mt-2">
+                            {{ dashboardData?.messages.total }}
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-around mt-5">
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <p class="font-medium rounded-md status-online">
+                                Replied
+
+                            </p>
+                            <span class="text-4xl">
+                                {{ dashboardData?.messages.replied }}
+                            </span>
+                        </div>
+
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <p class="font-medium rounded-md status-offline">
+                                Not Replied
+                            </p>
+                            <span class="text-4xl">{{ dashboardData?.messages.notReplied }}</span>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Latest Messages --
+            <h2 class="text-lg font-bold mb-3">Latest 25 Messages</h2>
+
+            <div *ngIf="dashboardData?.messagesList?.length; else noData">
+                <div *ngFor="let msg of dashboardData.messagesList"
+                    class="bg-white rounded-xl shadow-sm p-4 mb-3 flex justify-between items-center">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gray-200 rounded-full"></div>
+                        <div>
+                            <div class="text-sm font-semibold">{{ msg.customerName }}</div>
+                            <div class="text-xs text-gray-500">{{ msg.message }}</div>
+                            <div class="text-xs text-gray-400 mt-1">{{ msg.timeAgo }}</div>
+                        </div>
+                    </div>
+                    <button class="bg-black text-white px-4 py-1 rounded-md text-sm">
+                        VIEW / REPLY
+                    </button>
+                </div>
+            </div>
+
+            <ng-template #noData>
+                <p class="text-center text-gray-500">No messages found.</p>
+            </ng-template>
+        </div>
+
+        <div class="basis-3/12">
+            <!-- Top Customers --
+            <div class="dashbord-top-lastBox rounded-2xl p-4 max-h-screen">
+                <div class="flex justify-between border-b border-gray-200 pb-1 mb-2">
+                    <span class="font-semibold text-gray-700">TOP CUSTOMERS</span>
+                    <span class="font-semibold text-gray-700">INACTIVE</span>
+                </div>
+                <div class="overflow-y-auto h-full space-y-2">
+                    <div *ngFor="let customer of dashboardData?.topCustomers"
+                        class="flex items-center bg-white rounded-xl p-2 shadow-sm">
+                        <div class="w-10 h-10 bg-gray-200 rounded-full mr-3"></div>
+                        <div>
+                            <p class="font-medium text-sm">{{ customer.name }}</p>
+                            <p class="text-xs text-gray-500">{{ customer.company }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+</div> -->
+
+<div class="p-4 md:p-6 bg-gray-100 min-h-screen">
+    <div class="flex flex-col lg:flex-row mx-auto justify-center gap-4 lg:gap-5">
+        <!-- Left Section -->
+        <div class="w-full lg:basis-8/12 overflow-y-auto pr-0 lg:pr-4">
+            <!-- Top Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                <!-- Total Agents -->
+                <div class="dashbord-top-4boxes shadow-md rounded-2xl p-2 poppins">
+                    <div class="bg-white rounded-2xl px-6 sm:px-10 py-6 sm:py-12 lg:py-5">
+                        <h3 class="text-center text-sm sm:text-base font-semibold text-black raleway">
+                            TOTAL AGENTS
+                        </h3>
+                        <p class="text-3xl sm:text-4xl font-normal text-center mt-2">
+                            {{ dashboardData?.totalAgents?.total }}
+                        </p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-center justify-around mt-5 gap-3 sm:gap-0">
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <p class="font-medium rounded-md status-online">ONLINE</p>
+                            <span class="text-2xl sm:text-4xl">{{ dashboardData?.totalAgents?.online }}</span>
+                        </div>
+
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <p class="font-medium rounded-md status-offline">OFFLINE</p>
+                            <span class="text-2xl sm:text-4xl">{{
+                                dashboardData?.totalAgents?.offline
+                                }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Customers -->
+                <div class="dashbord-top-4boxes shadow-md rounded-2xl p-2 poppins">
+                    <div class="bg-white rounded-2xl px-6 sm:px-10 py-6 sm:py-12 lg:py-5">
+                        <h3 class="text-center text-sm sm:text-base font-semibold text-black raleway">
+                            TOTAL CUSTOMERS
+                        </h3>
+                        <p class="text-3xl sm:text-4xl font-normal text-center mt-2">
+                            {{ dashboardData?.totalCustomers?.total }}
+                        </p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-center justify-around mt-5 gap-3 sm:gap-0">
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <p class="font-medium rounded-md status-online">ACTIVE</p>
+                            <span class="text-2xl sm:text-4xl">{{
+                                dashboardData?.totalCustomers?.active
+                                }}</span>
+                        </div>
+
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <p class="font-medium rounded-md status-offline">INACTIVE</p>
+                            <span class="text-2xl sm:text-4xl">{{
+                                dashboardData?.totalCustomers?.inactive }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Messages -->
+                <div class="dashbord-top-4boxes shadow-md rounded-2xl p-2 poppins">
+                    <div class="bg-white rounded-2xl px-6 sm:px-10 py-6 sm:py-12 lg:py-5">
+                        <h3 class="text-center text-sm sm:text-base font-semibold text-black raleway">
+                            TODAY MESSAGES
+                        </h3>
+                        <p class="text-3xl sm:text-4xl font-normal text-center mt-2">
+                            {{ dashboardData?.todayMessages?.total }}
+                        </p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-center justify-around mt-5 gap-3 sm:gap-0">
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <p class="font-medium rounded-md status-online">REPLIED</p>
+                            <span class="text-2xl sm:text-4xl">{{
+                                dashboardData?.todayMessages?.replied
+                                }}</span>
+                        </div>
+
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <p class="font-medium rounded-md status-offline">NOT REPLIED</p>
+                            <span class="text-2xl sm:text-4xl">{{
+                                dashboardData?.todayMessages?.notReplied
+                                }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Latest Messages -->
+            <h2 class="text-lg sm:text-xl font-bold mb-3">Latest 25 Messages</h2>
+            <div class="overflow-x-auto bg-white rounded-lg max-h-[62vh]">
+                <div class="divide-y divide-gray-200">
+                    <div class="flex flex-col md:flex-row md:items-start md:justify-between px-4 py-2 hover:bg-gray-50"
+                        *ngFor="let msg of dashboardData?.latestMessages">
+                        <div class="flex items-center space-x-3 w-[70%]">
+                            <div
+                                class="w-8 h-8 bg-gray-200 rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-xs font-semibold text-gray-700">
+                                <ng-container *ngIf="msg.wa_media_url; else initials">
+                                    <img [src]="msg.wa_media_url" alt="profile" class="w-12 h-12 rounded-full" />
+                                </ng-container>
+                                <ng-template #initials>
+                                    {{ getInitials(msg.wa_name) }}
+                                </ng-template>
+                            </div>
+
+                            <div>
+                                <div class="text-xs text-black italic">
+                                    {{ getTimeAgo(msg.received_at) }}
+                                </div>
+
+                                <div class="flex flex-wrap items-center gap-2 text-black">
+                                    <span class="font-bold text-sm">{{
+                                        msg.wa_name || "N/A"
+                                        }}</span>
+                                    <span class="text-sm">| {{ msg.wa_number || "-" }} |</span>
+                                    <div class="flex flex-wrap gap-1 bg-[#7a8ea7] text-white rounded px-1 py-0">
+                                        <span class="text-sm px-1.5 py-[0.1rem]">
+                                            <ng-container *ngIf="msg.wa_type === 'text'; else icon">
+                                                A
+                                            </ng-container>
+                                            <ng-template #icon>
+                                                <i [class]="getIcon(msg.wa_type)"></i>
+                                            </ng-template>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-2 items-center pt-2">
+                                    <p *ngIf="msg.wa_type === 'image'" class="text-[#7a8ea7] text-xs">
+                                        <span class="text-xs">{{ msg.image_count || 1 }} image{{
+                                            (msg.image_count || 1) > 1 ? "s" : ""
+                                            }}
+                                            |</span>
+                                        <span *ngIf="msg.video_count">{{ msg.video_count }} video{{
+                                            msg.video_count > 1 ? "s" : ""
+                                            }}
+                                            |</span>
+                                        <span class="text-xs">{{
+                                            msg.wa_caption || msg.wa_img_caption || ""
+                                            }}</span>
+                                    </p>
+
+                                    <p *ngIf="msg.wa_type === 'video'" class="text-[#7a8ea7] text-xs">
+                                        <span class="text-xs">{{ msg.video_count || 1 }} video
+                                            {{ (msg.video_count || 1) > 1 ? "s" : "" }}</span>
+                                        |
+                                        <span class="text-xs ms-1">{{ msg.wa_caption || "" }}</span>
+                                    </p>
+
+                                    <p class="text-gray-500 text-xs wrap-msg">
+                                        {{ msg.wa_req_message || "" }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-2 mt-3 md:mt-0 md:self-center">
+                            <!-- <span class="bg-[#e45c64] text-white px-3 py-[6px] rounded text-xs flex items-center">{{
+                                msg.read_status }}</span> -->
+                            <button class="bg-black text-white text-xs px-2 py-[6px] rounded font-semibold"
+                                (click)="openViewReply(msg)">
+                                QUICK REPLY
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div *ngIf="dashboardData?.messagesList?.length; else noData">
+                <div *ngFor="let msg of dashboardData.messagesList"
+                    class="bg-white rounded-xl shadow-sm p-3 sm:p-4 mb-3 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                    <div class="flex items-start sm:items-center space-x-3 w-full sm:w-auto">
+                        <div class="w-10 h-10 bg-gray-200 rounded-full flex-shrink-0"></div>
+                        <div class="flex-1">
+                            <div class="text-sm font-semibold">{{ msg.customerName }}</div>
+                            <div class="text-xs text-gray-500">{{ msg.message }}</div>
+                            <div class="text-xs text-gray-400 mt-1">{{ msg.timeAgo }}</div>
+                        </div>
+                    </div>
+                    <button class="mt-2 sm:mt-0 bg-black text-white px-3 sm:px-4 py-1 rounded-md text-sm">
+                        VIEW / REPLY
+                    </button>
+                </div>
+            </div>
+
+            <ng-template #noData>
+                <p class="text-center text-gray-500">No messages found.</p>
+            </ng-template> -->
+        </div>
+
+        <!-- Right Section -->
+        <div class="w-full lg:basis-3/12 dashbord-top-lastBox rounded-2xl p-4">
+            <!-- Sticky Header -->
+            <!-- <div class="flex justify-around border-b border-gray-200 pb-1 mb-2 sticky top-0 z-10">
+                <p class="font-semibold text-black text-center text-md leading-none">TOP <br><span class="text-xs">CUSTOMERS</span></p>
+                <p class="font-semibold text-black text-center text-md leading-none">INACTIVE <br><span class="text-[10px]"> CUSTOMERS</span></p>
+            </div> -->
+
+            <div class="flex border-b border-gray-200 sticky top-0 z-10">
+                <!-- Top Customers Tab -->
+                <div class="w-1/2 text-center py-2 cursor-pointer" [ngClass]="{
+            'border-b-[1.6px] border-black font-semibold': activeTab === 'top',
+            'text-gray-600': activeTab !== 'top'
+          }" (click)="activeTab = 'top'">
+                    <p class="leading-none text-md">
+                        TOP <br />
+                        <span class="text-[10px]">CUSTOMERS</span>
+                    </p>
+                </div>
+
+                <!-- Inactive Customers Tab -->
+                <div class="w-1/2 text-center py-2 cursor-pointer" [ngClass]="{
+            'border-b-[1.6px] border-black font-semibold':
+              activeTab === 'inactive',
+            'text-gray-600': activeTab !== 'inactive'
+          }" (click)="activeTab = 'inactive'">
+                    <p class="leading-none text-md">
+                        INACTIVE <br />
+                        <span class="text-[10px]">CUSTOMERS</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Scrollable Content -->
+            <div *ngIf="activeTab === 'top'" class="max-h-[100vh] overflow-y-auto space-y-2 px-2 scrollable">
+                <!-- Optional Top Summary -->
+                <div class="flex flex-col justify-center items-center p-2">
+                    <p class="font-medium text-sm">Top Customer</p>
+                    <span class="text-lg font-semibold">{{
+                        dashboardData?.topCustomers.length
+                        }}</span>
+                </div>
+
+                <!-- Customers List -->
+                <div *ngFor="let customer of dashboardData?.topCustomers"
+                    class="flex items-center bg-white rounded-xl p-2 shadow-sm space-x-3">
+                    <!-- <div class="w-10 h-10 bg-gray-200 rounded-full mr-3"></div> -->
+                    <div
+                        class="w-8 h-8 bg-gray-200 rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-xs font-semibold text-gray-700">
+                        <ng-container *ngIf="customer.wa_media_url; else initials">
+                            <img [src]="customer.wa_media_url" alt="profile" class="w-12 h-12 rounded-full" />
+                        </ng-container>
+                        <ng-template #initials>
+                            {{ getInitials(customer.name) }}
+                        </ng-template>
+                    </div>
+                    <div>
+                        <p class="font-medium text-sm">{{ customer.name || "NA" }}</p>
+                        <p class="text-xs text-gray-500">
+                            Total Messages: {{ customer.totalMessages || "NA" }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scrollable Content -->
+            <div *ngIf="activeTab === 'inactive'" class="max-h-[100vh] overflow-y-auto space-y-2 px-2 scrollable">
+                <!-- Optional Top Summary -->
+                <div class="flex flex-col justify-center items-center p-2">
+                    <p class="font-medium text-sm">Inactive Customer</p>
+                    <span class="text-lg font-semibold">{{
+                        dashboardData?.inactiveCustomers.length
+                        }}</span>
+                </div>
+
+                <!-- Customers List -->
+                <div *ngFor="let inactiveCustomer of dashboardData?.inactiveCustomers"
+                    class="flex items-center bg-white rounded-xl p-2 shadow-sm space-x-2">
+                    <!-- <div class="w-10 h-10 bg-gray-200 rounded-full mr-3"></div> -->
+                    <div
+                        class="w-8 h-8 bg-gray-200 rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-xs font-semibold text-gray-700">
+                        <ng-container *ngIf="inactiveCustomer.wa_media_url; else initials">
+                            <img [src]="inactiveCustomer.wa_media_url" alt="profile" class="w-12 h-12 rounded-full" />
+                        </ng-container>
+                        <ng-template #initials>
+                            {{ getInitials(inactiveCustomer.name) }}
+                        </ng-template>
+                    </div>
+                    <div>
+                        <p class="font-medium text-sm">
+                            {{ inactiveCustomer.name || "NA" }}
+                        </p>
+                        <p class="text-xs text-gray-500">
+                            {{ inactiveCustomer.lastActive || "NA" }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+/* custom-snackbar.component.scss */
+.custom-snackbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  min-width: 280px;
+  font-family: "Raleway", sans-serif !important;
+
+
+  &.success {
+    background-color: #64bcac;
+  }
+
+  &.error {
+    background-color: #e45c64;;
+  }
+
+  &.info {
+    background-color: #2196f3;
+  }
+
+  &.warning {
+    background-color: #ff9800;
+  }
+
+  .message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+.message-flex{
+    display: flex !important;
+}
+::ng-deep .no-default-snackbar {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+::ng-deep .mat-mdc-snackbar-surface {
+    box-shadow: none !important;
+}
+
+::ng-deep .mat-mdc-snack-bar-container .mat-mdc-snackbar-surface {
+    background: transparent !important;
+}

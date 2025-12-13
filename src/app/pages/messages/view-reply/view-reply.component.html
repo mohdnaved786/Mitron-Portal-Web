@@ -1,0 +1,273 @@
+<div class="flex flex-col w-full width-[900px] max-w-[900px] mx-auto h-screen border overflow-hidden">
+  <!-- Header -->
+  <div
+    class="flex items-center justify-between py-[0.45rem] px-4 bg-gradient-to-r from-cyan-300 via-green-400 via-yellow-200 to-red-300">
+    <!-- class="flex items-center justify-between py-[0.45rem] px-4
+            bg-gradient-to-r
+            from-[#1db4de]
+            via-[#f1f52f]
+            to-[#dd0a0d]" -->
+    <div class="flex items-center space-x-3">
+      <div
+        class="w-10 h-10 bg-gray-200 rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-xs font-semibold text-gray-700">
+        <ng-container *ngIf="avatar; else initials">
+          <img [src]="avatar" alt="profile" class="w-10 h-10 rounded-full" />
+        </ng-container>
+        <ng-template #initials>
+          {{ getInitials(name) }}
+        </ng-template>
+      </div>
+
+      <div>
+        <h2 class="font-semibold text-gray-800">{{ name }}</h2>
+        <p class="text-sm text-gray-600">{{ number }}</p>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-2 w-full sm:w-auto">
+      <button class="px-3 py-1 font-bold bg-black hover:bg-[#000000cf] text-white rounded text-sm" (click)="openAssignAgents()">
+        ASSIGN AGENT
+      </button>
+      <div class="relative flex-1 sm:flex-none">
+        <input type="text" placeholder="Search" [(ngModel)]="searchTerm"
+          class="w-48 pl-10 py-[5px] text-sm text-[#7a8ea7] placeholder-[#7a8ea7] rounded-full focus:outline-none focus:ring-1 focus:ring-[#7a8ea7]" />
+        <span
+          class="material-symbols-outlined w-4 h-4 text-[#7a8ea7] absolute left-3 top-1/2 transform -translate-y-1/2 text-[20px]">
+          search
+        </span>
+      </div>
+      <!-- <button class="p-2 text-white">
+                <i class="bi bi-chat-square-quote text-[22px]"></i>
+            </button> -->
+
+      <button class="p-2 text-white" (click)="close()">
+        <i class="bi bi-x-lg text-[22px]"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Chat Messages -->
+  <!-- <div class="flex-1 p-4 overflow-y-auto space-y-2 bg-gray-50">
+            <div *ngFor="let msg of messages" class="flex"
+                [ngClass]="{'justify-start': msg.sender === 'customer', 'justify-end': msg.sender === 'user'}">
+                <div [ngClass]="{
+                'bg-[#FEF9EF] text-gray-800': msg.sender === 'customer',
+                'bg-[#E3F1FF] text-gray-800': msg.sender === 'user'
+            }" class="max-w-xs px-4 py-2 rounded-lg break-words">
+                    <p class="text-sm text-[#62748E]">{{ msg.time }}</p>
+                    <p class="mt-1 font-medium">{{ msg.text }}</p>
+                </div>
+            </div>
+        </div> -->
+
+  <!-- <div class="flex-1 p-4 overflow-y-auto space-y-2 bg-gray-50">
+            <div *ngIf="loading">Loading...</div>
+            <div *ngIf="error" class="text-red-600">{{ error }}</div>
+
+            <div *ngFor="let msg of messages" class="flex"
+                [ngClass]="{'justify-start': msg.sender === 'customer', 'justify-end': msg.sender === 'user'}">
+                <div [ngClass]="{
+                'bg-[#FEF9EF] text-gray-800': msg.sender === 'customer',
+                'bg-[#E3F1FF] text-gray-800': msg.sender === 'user'
+            }" class="max-w-xs px-4 py-2 rounded-lg break-words">
+                    <p class="text-sm text-[#62748E]">{{ msg.time }}</p>
+
+                    <div *ngIf="msg.imageUrl">
+                        <img [src]="msg.imageUrl" alt="image" class="max-w-full rounded mb-2" />
+                        <p *ngIf="msg.text" class="mt-1 font-medium">{{ msg.text }}</p>
+                    </div>
+
+                    <p *ngIf="!msg.imageUrl" class="mt-1 font-medium">{{ msg.text }}</p>
+                </div>
+            </div>
+        </div> -->
+
+  <!-- <div class="flex-1 p-4 overflow-y-auto space-y-2 bg-gray-50">
+        <div *ngIf="loading" class="text-center text-gray-500">Loading...</div>
+        <div *ngIf="error" class="text-red-600">{{ error }}</div>
+
+        <div *ngFor="let msg of messages" class="flex"
+            [ngClass]="{'justify-start': msg.sender === 'customer', 'justify-end': msg.sender === 'user'}">
+
+            <div [ngClass]="{
+                'bg-[#FEF9EF] text-gray-800': msg.sender === 'customer',
+                'bg-[#E3F1FF] text-gray-800': msg.sender === 'user'
+                }"
+                class="relative max-w-xs px-4 py-2 rounded-lg break-words shadow-sm">
+
+            <!-- Message Text / Image --
+            <div *ngIf="msg.imageUrl">
+                <img [src]="msg.imageUrl" alt="image" class="max-w-full rounded mb-1" />
+            </div>
+            <p *ngIf="msg.text" class="text-sm">{{ msg.text }}</p>
+
+            <!-- Timestamp --
+            <span class="absolute text-[10px] text-gray-500 bottom-1 right-2 select-none">
+                {{ msg.time | date:'hh:mm a' }}
+            </span>
+            </div>
+        </div>
+        </div> -->
+
+  <div class="flex-1 p-4 overflow-y-auto space-y-2 bg-gray-50 relative" #chatContainer (scroll)="onScroll()">
+    <div *ngIf="loading" class="text-center text-gray-500">Loading...</div>
+    <div *ngIf="error" class="text-red-600">{{ error }}</div>
+
+    <ng-container *ngFor="let item of groupedMessages">
+      <!-- 🔹 Date Separator -->
+      <div class="text-center my-2 text-xs text-gray-500 font-medium select-none">
+        {{ item.dateLabel }}
+      </div>
+
+      <!-- 🔹 Messages for this date -->
+      <div *ngFor="let msg of item.messages" class="flex" [ngClass]="{
+          'justify-start': msg.sender === 'customer',
+          'justify-end': msg.sender === 'user'
+        }">
+        <div [ngClass]="{
+            'bg-[#FEF9EF] text-gray-800': msg.sender === 'customer',
+            'bg-[#E3F1FF] text-gray-800': msg.sender === 'user'
+          }" class="relative max-w-xs px-4 py-2 rounded-lg break-words shadow-sm">
+          <!-- Message Text / Image -->
+          <div *ngIf="msg.imageUrl">
+            <img [src]="msg.imageUrl" alt="image" class="max-w-full rounded mb-1" />
+          </div>
+          <p *ngIf="msg.text" class="text-sm me-10">{{ msg.text }}</p>
+
+          <!-- Timestamp -->
+          <span class="absolute text-[10px] text-gray-500 bottom-1 right-2 select-none ms-[20px]">
+            {{ msg.time | date : "hh:mm a" }}
+          </span>
+        </div>
+      </div>
+    </ng-container>
+
+
+
+
+<!-- search code -->
+
+
+    <ng-container *ngFor="let item of filteredGroupedMessages">
+      <!-- 🔹 Date Separator -->
+      <div class="text-center my-2 text-xs text-gray-500 font-medium select-none">
+        {{ item.dateLabel }}
+      </div>
+
+      <!-- 🔹 Messages for this date -->
+      <div *ngFor="let msg of item.messages" class="flex" [ngClass]="{
+          'justify-start': msg.sender === 'customer',
+          'justify-end': msg.sender === 'user'
+        }">
+        <div [ngClass]="{
+            'bg-[#FEF9EF] text-gray-800': msg.sender === 'customer',
+            'bg-[#E3F1FF] text-gray-800': msg.sender === 'user'
+          }" class="relative max-w-xs px-4 py-2 rounded-lg break-words shadow-sm">
+          <!-- Message Text / Image -->
+          <div *ngIf="msg.imageUrl">
+            <img [src]="msg.imageUrl" alt="image" class="max-w-full rounded mb-1" />
+          </div>
+          <!-- <p *ngIf="msg.text" class="text-sm me-10">{{ msg.text }}</p> -->
+          <p *ngIf="msg.text" class="text-sm me-10" [innerHTML]="highlightText(msg.text)"></p>
+
+          <!-- Timestamp -->
+          <span class="absolute text-[10px] text-gray-500 bottom-1 right-2 select-none ms-[20px]">
+            {{ msg.time | date : "hh:mm a" }}
+          </span>
+        </div>
+      </div>
+    </ng-container>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  <!-- Scroll to Bottom Button -->
+  <button *ngIf="showScrollToBottom" (click)="scrollToBottom()"
+    class="absolute w-10 h-10 bg-red-300 bottom-20 right-5 text-white rounded-full shadow-lg hover:bg-red-400 transition-all z-50">
+    <i class="bi bi-arrow-down text-lg"></i>
+  </button>
+
+  <!-- Input Box -->
+  <!-- File Preview Section --
+    <div *ngIf="filePreviews.length > 0" class="flex gap-2 p-2 border-t bg-gray-50 overflow-x-auto">
+        <div *ngFor="let preview of filePreviews; let i = index" class="relative w-16 h-16">
+            <!-- If image --
+            <img *ngIf="preview.isImage" [src]="preview.url" class="object-cover w-full h-full rounded-lg border" />
+
+            <!-- If not image --
+            <div *ngIf="!preview.isImage" class="bg-gray-200 flex items-center justify-center h-full rounded-lg">
+                <i class="bi bi-file-earmark-text text-gray-600 text-lg"></i>
+            </div>
+
+            <button (click)="removeFile(i)"
+                class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
+                <i class="bi bi-x text-xs"></i>
+            </button>
+        </div>
+    </div>-->
+
+  <div *ngIf="filePreviews.length > 0" class="flex gap-2 p-2 border-t bg-gray-50 overflow-x-auto">
+    <div *ngFor="let preview of filePreviews; let i = index" class="relative w-16 h-16">
+      <img *ngIf="preview.isImage" [src]="preview.url" class="object-cover w-full h-full rounded-lg border" />
+
+      <div *ngIf="!preview.isImage" class="bg-gray-200 flex items-center justify-center h-full rounded-lg">
+        <i class="bi bi-file-earmark-text text-gray-600 text-lg"></i>
+      </div>
+
+      <button (click)="removeFile(i)"
+        class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
+        <i class="bi bi-x text-xs"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Message Input -->
+  <div class="flex items-center border-t bg-white space-x-2 justify-between">
+    <div class="basis-10/12 p-2 flex items-center">
+      <button (click)="openQuickReply()" class="text-gray-500 hover:text-gray-700 text-gray-500 p-2">
+        <i class="bi bi-filter-right text-lg"></i>
+      </button>
+      <span class="text-gray-500 text-xs">OR</span>
+
+      <input [(ngModel)]="newMessage" type="text" placeholder="Enter a message"
+        class="flex-1 px-4 py-2 focus:outline-none text-gray-500 text-md" />
+
+      <!-- <input #fileInput id="fileInput" type="file" multiple class="hidden"
+                (change)="handleFileSelection($event)" /> -->
+    </div>
+
+    <div class="basis-2/12 file-send p-2 flex items-center border-s">
+      <!-- <button  class="text-gray-500 hover:text-gray-700 text-gray-500 p-2">
+                <i class="bi bi-link-45deg text-lg"></i>
+            </button> -->
+
+      <!-- <button (click)="handleFileSelection($event)" class="text-gray-500 hover:text-gray-700 text-gray-500 p-2">
+                <i class="bi bi-paperclip text-lg"></i>
+            </button> -->
+      <input #fileInput type="file" (change)="handleFileSelection($event)" multiple hidden />
+
+      <button (click)="fileInput.click()" class="text-gray-500 hover:text-gray-700 p-2">
+        <i class="bi bi-paperclip text-lg"></i>
+      </button>
+
+      <button type="submit" (click)="sendMessage()" class="text-gray-500 hover:text-gray-700 p-2 sendMesBtn">
+        <i class="bi bi-send text-lg"></i>
+      </button>
+    </div>
+  </div>
+</div>

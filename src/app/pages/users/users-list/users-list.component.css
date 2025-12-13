@@ -1,0 +1,96 @@
+body {
+  font-family: "Raleway", sans-serif !important;
+  background-color: #f7f9fc;
+}
+
+h2 {
+  font-family: "Poppins", sans-serif;
+}
+
+table {
+  font-family: "Raleway", sans-serif !important;
+}
+
+.table-header th {
+  font-weight: 600;
+  color: #000000;
+  text-align: left;
+  padding: 10px 16px;
+  text-transform: capitalize;
+}
+
+.table-row td {
+  padding: 5px 16px;
+  border-top: 1px solid #e5e7eb;
+  color: #1f2937;
+}
+
+.table-row td span {
+  font-weight: 600;
+}
+
+.status-online {
+  font-size: 9px !important;
+  padding: 0px 8px !important;
+  background-color: #64bcac;
+  color: #fff;
+  border-radius: 4px !important;
+  letter-spacing: 0.7px;
+}
+
+.status-offline {
+  background-color: #e45c64;
+  color: #fff;
+  font-size: 9px !important;
+  padding: 0px 8px !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.7px;
+}
+
+.status-deleted {
+  background-color: #e45c64;
+  color: #fff;
+  font-size: 9px !important;
+  padding: 0px 8px !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.7px;
+}
+
+.agents-section ::ng-deep .cdk-overlay-pane .mat-mdc-dialog-panel {
+  max-width: var(--mat-dialog-container-max-width, 800px) !important;
+}
+
+::ng-deep .mat-mdc-menu-panel .mat-divider {
+  margin-left: 0.8rem !important;
+  margin-right: 0.8rem !important;
+}
+
+::ng-deep .custom-menu {
+  min-width: 150px !important;
+}
+
+::ng-deep .custom-menu .mat-mdc-menu-item {
+  min-height: 40px !important;
+  padding: 0 20px !important;
+  gap: 2px;
+}
+
+::ng-deep .custom-menu .mdc-menu-item-text {
+  font-family: "Raleway", sans-serif !important;
+}
+
+::ng-deep .custom-menu .material-icons {
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+::ng-deep .custom-menu .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
+  font-family: "Raleway", sans-serif !important;
+  font-size: 12px !important;
+}
+
+.userListMenu ::ng-deep .mat-mdc-menu-panel {
+  border-radius: 0px !important;
+  background: white !important;
+  padding: 5px;
+}

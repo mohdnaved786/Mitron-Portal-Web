@@ -1,0 +1,54 @@
+.poppins {
+  font-family: "Poppins", sans-serif;
+}
+.raleway {
+  font-family: "Raleway", sans-serif !important;
+}
+
+p{
+    word-wrap: break-word;
+}
+.dashbord-top-4boxes {
+  background: linear-gradient(
+    139.33deg,
+    #1db4de4d -4.76%,
+    #89ea434d 36.38%,
+    #f1f52e4d 71.86%,
+    #dd0a0d4d 102.2%
+  );
+
+}
+
+.dashbord-top-lastBox {
+  background: linear-gradient(
+    139.33deg,
+    rgba(29, 180, 222, 0.3) -4.76%,
+    rgba(137, 234, 67, 0.3) 36.38%,
+    rgba(241, 245, 46, 0.3) 71.86%,
+    rgba(221, 10, 13, 0.3) 102.2%
+  );
+}
+.status-online {
+  font-size: 10px !important;
+  padding: 2px 8px !important;
+  background-color: #64bcac;
+  color: #fff;
+  border-radius: 4px !important;
+  letter-spacing: 0.7px;
+}
+
+.status-offline {
+  background-color: #e45c64;
+  color: #fff;
+  font-size: 10px !important;
+  padding: 2px 8px !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.7px;
+}
+
+
+
+::ng-deep .mat-mdc-dialog-surface{
+  overflow-y:unset !important;
+
+}

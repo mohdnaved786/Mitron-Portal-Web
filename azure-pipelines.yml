@@ -1,0 +1,43 @@
+# Node.js with Angular
+# Build a Node.js project that uses Angular.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'production'  
+  nodeVersion: '20.x'
+
+steps:
+  # Install Node.js using NodeTool
+  - task: NodeTool@0
+    inputs:
+      versionSpec: $(nodeVersion)
+    displayName: 'Install Node.js'
+
+  # Install Angular CLI compatible with Angular 18
+  - script: |
+      npm install -g @angular/cli@18
+      ng version
+    displayName: 'Install Angular CLI for Angular 18'
+
+  # Install dependencies
+  - script: npm ci
+    displayName: 'Install Dependencies'
+
+
+  # Build the Angular application
+  - script: ng build --configuration $(buildConfiguration)
+    displayName: 'Build Angular Application'
+
+
+  # Publish artifacts
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: 'dist/mitron-portal'
+      artifactName: 'drop'

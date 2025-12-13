@@ -1,0 +1,30 @@
+.poppins {
+  font-family: "Poppins", sans-serif !important;
+}
+
+body {
+  font-family: "Raleway", sans-serif !important;
+  background-color: #f7f9fc;
+}
+
+h2 {
+  font-family: "Poppins", sans-serif;
+}
+
+.raleway {
+  font-family: "Raleway", sans-serif !important;
+}
+
+.wrap-msg {
+  white-space: nowrap;       /* keep it in one line */
+  overflow: hidden;          /* hide extra text */
+  text-overflow: ellipsis;   /* show "..." at the end */
+  max-width: 250px;          /* set a width limit */
+  display: inline-block;
+}
+
+
+
+/* ::ng-deep .left-align-dialog .cdk-global-overlay-wrapper{
+  justify-content: end !important;
+} */

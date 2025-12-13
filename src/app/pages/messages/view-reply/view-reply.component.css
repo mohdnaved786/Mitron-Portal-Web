@@ -1,0 +1,27 @@
+.sendMesBtn{
+    transform: rotate(45deg);
+}
+
+::ng-deep .mat-mdc-dialog-surface{
+  overflow-y:unset !important;
+}
+
+/* ::ng-deep .left-align-dialog .mat-mdc-dialog-container  {
+      /* margin-top: 64px;
+} */
+::ng-deep .cdk-overlay-pane.left-align-dialog {
+  margin-left: 0 !important;
+  /* right: 5rem !important; */
+   right: 17.4rem !important;
+  transform: none !important;
+  top: 0 !important;
+  /* height: vh !important; */
+  border-radius: 0 !important;
+}
+
+@media screen and (max-width: 768px) {
+  ::ng-deep .cdk-overlay-pane.left-align-dialog {
+  /* margin-left: 0 !important; */
+  right: 1rem !important;
+  }
+}

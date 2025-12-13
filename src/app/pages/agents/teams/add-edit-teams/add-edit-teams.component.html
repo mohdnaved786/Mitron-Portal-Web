@@ -1,0 +1,92 @@
+<div class="bg-white shadow add-edit-teams rounded-none">
+  <!-- Header -->
+  <div
+    class="bg-gradient-to-r from-cyan-300 via-green-400 via-yellow-200 to-red-300 px-4 py-2 mb-0"
+  >
+    <div class="flex justify-between items-center">
+      <h2 class="text-lg font-semibold text-gray-800 m-0">Teams</h2>
+      <button
+        type="button"
+        class="text-gray-600 hover:text-gray-800 font-bold"
+        (click)="closeDialog()"
+      >
+        <i class="bi bi-x-lg text-base text-white"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <form [formGroup]="teamForm" (ngSubmit)="onSubmit()" class="">
+    <div class="px-4 py-3 space-y-5 text-base" mat-dialog-content>
+      <!-- Team Name -->
+      <div>
+        <label class="block raleway text-gray-700  font-medium mb-1">
+          Team Name
+        </label>
+        <input
+          formControlName="teamName"
+          type="text"
+          placeholder="Enter team name"
+          class="w-full border border-[#CAD5E2] rounded-full px-3 py-2 focus:ring-1 focus:ring-[#CAD5E2] outline-none"
+        />
+      </div>
+
+      <!-- Supervisor Dropdown -->
+      <div class="relative" (clickOutside)="isOpen = false">
+        <label class="block raleway text-gray-700 text-sm font-medium mb-1">
+          Supervisor
+        </label>
+
+        <!-- Selected box -->
+        <div
+          class="w-full bg-white border border-[#CAD5E2] rounded-full px-3 py-2 focus:ring-1 focus:ring-[#CAD5E2] outline-none flex justify-between items-center cursor-pointer transition-all duration-200"
+          (click)="toggleDropdown()"
+        >
+          {{ teamForm.get("supervisor")?.value || "Select Supervisor" }}
+          <svg
+            class="w-5 h-5 text-gray-400 transform transition-transform duration-300"
+            [class.rotate-180]="isOpen"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </div>
+
+        <!-- Dropdown Options -->
+        <div
+          *ngIf="isOpen"
+          class="absolute z-10 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg overflow-y-auto animate-fadeIn max-h-[200px] w-full"
+        >
+          <div
+            *ngFor="let option of supervisors"
+            (click)="selectSupervisor(option)"
+            class="px-4 py-2 text-gray-700 text-sm hover:bg-gray-50 hover:text-gray-600 cursor-pointer"
+          >
+            {{ option }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Status & Button -->
+      <div class="flex items-center justify-between w-full">
+        <mat-slide-toggle formControlName="status">
+          {{ teamForm.get("status")?.value ? "Active" : "Inactive" }}
+        </mat-slide-toggle>
+
+        <button
+          type="submit"
+          class="bg-sky-500 raleway hover:bg-sky-600 text-white px-6 py-2 rounded-md font-medium"
+        >
+          {{ data ? "Update" : "Save" }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

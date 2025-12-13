@@ -1,0 +1,348 @@
+<main>
+  <section class="bg-gray-50 p-4 sm:p-6 md:p-8 Users-section">
+    <div class="container max-w-6xl mx-auto">
+      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center popins gap-4 mb-3">
+        <!-- Left -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3">
+          <h2 class="text-lg sm:text-xl md:text-2xl font-medium text-gray-900 my-2 sm:my-4 ms-2">
+            Users
+          </h2>
+        </div>
+        <div class="div">
+          <button
+            class="bg-[#1DB4DE] text-[12px] text-white px-4 py-2 rounded-full hover:bg-[#1db4ded4] transition assign-btn"
+            (click)="addUser()">
+            Add User
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <!-- Header -->
+        <div class="px-4 sm:px-6 py-[13px] flex flex-wrap items-center justify-between bg-[#eaeef7] gap-3">
+          <div class="flex flex-wrap items-center space-x-2 text-sm text-gray-500">
+            <span>{{ items.length }} of {{ totalItems }}</span>
+            <span class="text-gray-400">|</span>
+            <span>No filters applied</span>
+          </div>
+          <div class="flex items-center space-x-2 w-full sm:w-auto">
+            <div class="relative flex-1 sm:flex-none">
+              <input type="text" placeholder="search" [(ngModel)]="searchQuery"
+                (input)="filterItems(['userName', 'email', 'role', 'country', 'mobile'])"
+                class="w-full pl-10 py-[4px] text-sm text-[#7a8ea7] placeholder-[#7a8ea7] border-[1.5px] border-[#7a8ea7] rounded-full focus:outline-none focus:ring-1 focus:ring-[#7a8ea7]" />
+
+              <span
+                class="material-symbols-outlined w-4 h-4 text-[#7a8ea7] absolute left-3 top-1/2 transform -translate-y-1/2 text-[20px]">
+                search
+              </span>
+            </div>
+            <button
+              class="flex items-center justify-center w-10 h-10 text-[#7a8ea7] rounded-full hover:bg-[#7a8ea742] transition-all duration-300 ease-in-out"
+              [ngClass]="{
+                'bg-[#7a8ea742]': showFilters,
+                'hover:bg-[#7a8ea742]': !showFilters
+              }" (click)="toggleFilterDropdown()">
+              <span class="material-symbols-outlined text-[24px]">filter_alt</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-hidden transition-all duration-500 ease-in-out"
+          [style.maxHeight]="showFilters ? '200px' : '0'" [style.opacity]="showFilters ? '1' : '0'">
+          <!-- Filter Dropdown -->
+          <div
+            class="bg-[#eaeef7] px-4 sm:px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row gap-5 transition-all duration-300 ease-in-out">
+            <!-- Supervisor Dropdown -->
+            <div class="flex flex-col">
+              <label for="supervisor" class="text-[10px] font-medium text-gray-700 mb-1 uppercase">Supervisor</label>
+              <select id="supervisor" [(ngModel)]="selectedSupervisor" (change)="applyFilters()"
+                class="pe-20 ps-2 py-1 border-none rounded-0 text-xs focus:outline-none focus:ring-1 focus:ring-[#7a8ea7] font-semibold">
+                <option value="">All</option>
+                <option *ngFor="let sup of supervisors" [value]="sup">
+                  {{ sup }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Status Dropdown -->
+            <div class="flex flex-col">
+              <label for="status" class="text-[10px] font-medium text-gray-700 mb-1 uppercase">Status</label>
+              <select id="status" [(ngModel)]="selectedStatus" (change)="applyFilters()"
+                class="pe-20 ps-2 py-1 border-none rounded-0 text-xs focus:outline-none focus:ring-1 focus:ring-[#7a8ea7] text-start font-semibold">
+                <option value="">All</option>
+                <option value="yes">Online</option>
+                <option value="no">Offline</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table (responsive wrapper) -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left text-gray-500 min-w-[700px]">
+            <thead class="text-gray-600 uppercase">
+              <tr class="table-header">
+                <th scope="col" class="px-6 py-3 relative cursor-pointer left-[60px]"
+                  (click)="sortData('name', $event); toggleArrow()" [class.active]="sortColumn === 'name'">
+                  <div class="flex items-center gap-1 whitespace-nowrap">
+                    User Name
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                      class="w-4 h-4 text-gray-400 transform transition-transform duration-300" [ngClass]="{
+                        'rotate-180': isArrowOpen && sortColumn === 'name'
+                      }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </th>
+                <th scope="col" class="px-6 py-3" (click)="sortData('country', $event); toggleArrow()"
+                  [class.active]="sortColumn === 'country'">
+                  <div class="flex items-center gap-1 whitespace-nowrap">
+                    <span>Country</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                      class="w-4 h-4 text-gray-400 transform transition-transform duration-300" [ngClass]="{
+                        'rotate-180': isArrowOpen && sortColumn === 'country'
+                      }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </th>
+                <th scope="col" class="px-6 py-3" (click)="sortData('mobile', $event); toggleArrow()"
+                  [class.active]="sortColumn === 'mobile'">
+                  <div class="flex items-center gap-1 whitespace-nowrap">
+                    <span>Mobile Number</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                      class="w-4 h-4 text-gray-400 transform transition-transform duration-300" [ngClass]="{
+                        'rotate-180': isArrowOpen && sortColumn === 'mobile'
+                      }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </th>
+                <th scope="col" class="px-6 py-3" (click)="sortData('role', $event); toggleArrow()"
+                  [class.active]="sortColumn === 'role'">
+                  <div class="flex items-center gap-1 whitespace-nowrap">
+                    <span>Role</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                      class="w-4 h-4 text-gray-400 transform transition-transform duration-300" [ngClass]="{
+                        'rotate-180': isArrowOpen && sortColumn === 'role'
+                      }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </th>
+                <th scope="col" class="px-6 py-3" (click)="sortData('status', $event); toggleArrow()"
+                  [class.active]="sortColumn === 'status'">
+                  <div class="flex items-center gap-1 whitespace-nowrap">
+                    <span>Status</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                      class="w-4 h-4 text-gray-400 transform transition-transform duration-300" [ngClass]="{
+                        'rotate-180': isArrowOpen && sortColumn === 'status'
+                      }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </th>
+                <th scope="col" class="px-6 py-3 text-right"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let agent of items" class="bg-white table-row">
+                <td class="px-6 py-4 font-medium text-gray-900 flex items-center space-x-3">
+                  <div class="relative">
+                    <div
+                      class="w-12 h-12 bg-[#E0E0E0] rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-lg font-semibold text-[#A0A0A0] border border-[#A0A0A0]">
+                      <!-- <ng-container *ngIf="agent.profile_image; else initials">
+                        <img
+                          [src]="agent.profile_image"
+                          alt=""
+                          class="w-full h-full object-cover"
+                        />
+                      </ng-container>
+                      <ng-template #initials>
+                        {{ getInitials(agent) }}
+                      </ng-template> -->
+
+                      <ng-container *ngIf="agent.profile_image; else initials">
+                        <img [src]="agent.profile_image" alt="" class="w-full h-full object-cover" />
+                      </ng-container>
+                      <ng-template #initials>
+                        {{ getInitials(agent.userName) }}
+                      </ng-template>
+                    </div>
+                    <span
+                      class="absolute top-[2px] right-[3px] block w-2 h-2 rounded-full border border-[#fff] border-[1.5px]"
+                      [ngStyle]="{
+                        'background-color': statusColor(agent.status)
+                      }">
+                    </span>
+                  </div>
+                  <span>{{ agent.userName }} {{ agent.last_name }}
+                    <br />
+                    <span class="text-[##1f2937] !font-normal">
+                      {{ agent.email }}
+                    </span>
+                  </span>
+                </td>
+
+                <td class="px-6 py-4">
+                  <!-- {{ agent.country_name ?? "NA" }} &nbsp; (
+                  {{ agent.country_code ?? "NA" }}) -->
+                  {{ agent.country ?? "NA" }}
+                </td>
+                <td class="px-6 py-4">
+                  {{ agent.mobile ?? "NA" }}
+                </td>
+
+                <td class="px-6 py-4">{{ agent.role }}</td>
+                <td class="px-6 py-4">
+                  <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-md" [ngClass]="{
+                      'status-offline': agent.status === 0,
+                      'status-online': agent.status === 1,
+                      'status-deleted': agent.status === 2,
+                    }">
+                    {{
+                    agent.status === 1
+                    ? "ACTIVE"
+                    : agent.status === 0
+                    ? "INACTIVE"
+                    : "DELETED"
+                    }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-right agents-menu userListMenu">
+                  <!-- <button class="text-gray-400 hover:text-gray-600">
+                                        <span class="material-symbols-outlined">more_vert</span>
+                                    </button> -->
+                  <!-- Trigger Button -->
+                  <button [matMenuTriggerFor]="menu" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                    <span class="material-symbols-outlined">more_vert</span>
+                  </button>
+
+                  <!-- Material Menu -->
+
+                  <mat-menu #menu="matMenu" class="custom-menu" xPosition="after" yPosition="below">
+                    <!-- Edit -->
+                    <button mat-menu-item class="menu-item" (click)="editUser(agent)">
+                      <mat-icon class="menu-icon">edit</mat-icon>
+                      <span>Edit</span>
+                    </button>
+                    <button mat-menu-item class="menu-item" (click)="openViewAgentPage(agent.id)">
+                      <mat-icon class="menu-icon">visibility</mat-icon>
+                      <span>View</span>
+                    </button>
+
+                    <!-- Delete -->
+                    <button mat-menu-item class="menu-item delete-item" (click)="deleteUser(agent)">
+                      <mat-icon class="menu-icon">delete</mat-icon>
+                      <span>Delete</span></button><mat-divider></mat-divider>
+                    <!-- Toggle Active / Inactive -->
+                    <button mat-menu-item class="menu-item toggle-item" (click)="
+                        $event.stopPropagation(); toggleAgentStatus(agent)
+                      ">
+                      <!-- <mat-icon
+                        class="menu-icon"
+                        [ngStyle]="{
+                          color: agent.active ? '#43a047' : '#e53935'
+                        }"
+                      >
+                        {{ agent.active ? "toggle_on" : "toggle_off" }}
+                      </mat-icon>
+                      <span
+                        [style.color]="agent.active ? '#43a047' : '#e53935'"
+                      >
+                        {{ agent.active ? "Active" : "Inactive" }}
+                      </span> -->
+
+                      <mat-icon class="menu-icon" [ngStyle]="{
+                          color: agent.status !== 1 ? '#43a047' : '#e53935'
+                        }">
+                        {{ agent.status !== 1 ? "toggle_on" : "toggle_off" }}
+                      </mat-icon>
+                      <span [style.color]="
+                          agent.status !== 1 ? '#43a047' : '#e53935'
+                        ">
+                        {{ agent.status !== 1 ? "Active" : "Inactive" }}
+                      </span>
+                    </button>
+                  </mat-menu>
+                </td>
+              </tr>
+              <tr *ngIf="items.length === 0" class="table-row">
+                <div class="text-red-500 font-bold text-center py-4">
+                  No records found.
+                </div>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Footer -->
+        <div
+          class="px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between border-t border-gray-200 bg-[#eaeef7] gap-3">
+          <div class="flex items-center text-sm text-gray-500 space-x-2">
+            <span>Items per page:</span>
+            <div class="relative">
+              <select class="p-1 pr-6 rounded-md border-[1.5px] border-[#7d8da4] bg-white text-sm appearance-none">
+                <option>10</option>
+              </select>
+              <svg
+                class="w-4 h-4 text-gray-500 absolute right-1.5 top-1/2 transform -translate-y-1/2 pointer-events-none"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div class="px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between bg-[#eaeef7] gap-3">
+            <div class="flex flex-wrap gap-[0.5px] overflow-hidden border-[1.5px] border-[#7d8da4] bg-white rounded-md">
+              <!-- First Page -->
+              <button class="p-1 bg-[#eaeef7] text-gray-400 hover:bg-[#b6becd] hover:text-white disabled:opacity-50"
+                [disabled]="currentPage === 1" (click)="firstPage()">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
+                </svg>
+              </button>
+              <!-- Previous Page -->
+              <button class="p-1 bg-[#eaeef7] text-gray-500 hover:bg-[#b6becd] hover:text-white"
+                [disabled]="currentPage === 1" (click)="prevPage()">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+              </button>
+
+              <!-- Page Numbers -->
+              <div class="bg-[#eaeef7] flex gap-[0.5px]">
+                <button *ngFor="let page of pagination" (click)="typeof page === 'number' && goToPage(page)"
+                  [disabled]="page === '...' || page === currentPage" [ngClass]="{
+                    'bg-[#7a8ea7] text-white': page === currentPage,
+                    'bg-white text-gray-500 hover:bg-[#b6becd] hover:text-white':
+                      page !== currentPage && page !== '...'
+                  }" class="px-2 py-1 text-sm font-medium">
+                  {{ page }}
+                </button>
+              </div>
+
+              <!-- Next Page -->
+              <button class="p-1 bg-[#eaeef7] text-gray-500 hover:bg-[#b6becd] hover:text-white"
+                [disabled]="currentPage === totalPages" (click)="nextPage()">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </button>
+              <!-- Last Page -->
+              <button class="p-1 bg-[#eaeef7] text-gray-400 hover:bg-[#b6becd] hover:text-white disabled:opacity-50"
+                [disabled]="currentPage === totalPages" (click)="lastPage()">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7">
+                  </path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

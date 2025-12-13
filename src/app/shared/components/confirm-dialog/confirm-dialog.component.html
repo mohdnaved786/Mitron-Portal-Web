@@ -1,0 +1,59 @@
+<div class="confirm-dialog">
+  <div class="confirm-dialog-content">
+    <!-- Agent Profile Section -->
+    <div *ngIf="data.isAgent" class="flex items-center gap-3 mb-4 px-4 py-3 bg-[#eaeef7] rounded-t-[16px]">
+      <div
+        class="w-12 h-12 bg-[#E0E0E0] rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-lg font-semibold text-[#A0A0A0] border border-[#A0A0A0]">
+        <ng-container *ngIf="data.agent?.profile_image; else initials">
+          <img [src]="data.agent.profile_image" alt="" class="w-full h-full object-cover" />
+        </ng-container>
+
+        <ng-template #initials>
+          {{ getInitials(data.agent) }}
+        </ng-template>
+      </div>
+
+      <div class="font-medium text-lg">
+        {{ data.agent?.name }}
+      </div>
+    </div>
+    <!-- Customer Profile Section -->
+    <div *ngIf="data.isCustomer" class="flex items-center gap-3 mb-4 px-4 py-3 bg-[#eaeef7] rounded-t-[16px]">
+      <div
+        class="w-12 h-12 bg-[#E0E0E0] rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-lg font-semibold text-[#A0A0A0] border border-[#A0A0A0]">
+        <ng-container *ngIf="data.customer?.profile_image; else initials">
+          <img [src]="data.customer.profile_image" alt="" class="w-full h-full object-cover" />
+        </ng-container>
+
+        <ng-template #initials>
+          {{ getInitialsCustomer(data.customer) }}
+        </ng-template>
+      </div>
+
+      <div class="font-medium text-lg">
+        {{ data.customer?.name }}
+      </div>
+    </div>
+
+    <h2 mat-dialog-title class="font-bold">{{ data.title }}</h2>
+    <mat-dialog-content>{{ data.message }}</mat-dialog-content>
+    <mat-dialog-actions align="center">
+      <div class="flex justify-center w-full gap-3">
+        <!-- <button
+                    class="bg-[#7A8EA7] text-white py-2 rounded-full shadow hover:bg-[#7a8ea7d1] mb-2 mt text-[16px] font-medium px-6 uppercase"
+                    (click)="onCancel()">Cancel</button> -->
+        <button
+          class="bg-[#7A8EA7] text-white py-2 rounded-full shadow hover:bg-[#7a8ea7d1] mb-2 mt text-[16px] font-medium px-6 uppercase"
+          (click)="onCancel()">
+          {{ data.cancelBtnText || "Cancel" }}
+        </button>
+
+        <button
+          class="bg-black text-white py-2 rounded-full shadow hover:bg-gray-800 mb-2 mt text-[16px] font-medium px-6 uppercase"
+          (click)="onConfirm()">
+          {{ data.confirmBtnText || "Confirm" }}
+        </button>
+      </div>
+    </mat-dialog-actions>
+  </div>
+</div>

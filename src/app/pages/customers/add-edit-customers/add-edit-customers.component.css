@@ -1,0 +1,117 @@
+body {
+  font-family: "Raleway", sans-serif !important;
+  background-color: #f7f9fc;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* component.css */
+input[type="radio"] {
+  accent-color: #0e0e0e; /* Tailwind sky-500 */
+}
+
+.invalid-msg {
+  color: #e15050;
+  font-size: 12px;
+  margin-left: 12px;
+}
+
+.mt-4px {
+  margin-top: 4px !important;
+}
+
+
+/* Date picker input custom css */
+.custom-input, ::ng-deep .mat-calendar , ::ng-deep.mat-calendar-body-cell, ::ng-deep.mat-mdc-button
+ {
+  font-family: "Raleway", sans-serif !important;
+}
+.custom-input::placeholder , ::ng-deep.mat-mdc-icon-button svg {
+  color: #9ca3af !important;
+  opacity: 1;
+  font-weight: 400;
+  font-family: "Raleway", sans-serif !important;
+  fill: #9ca3af;
+}
+
+::ng-deep .mat-mdc-form-field-subscript-wrapper{
+  display: none !important;
+}
+
+::ng-deep .mat-datepicker-content {
+  background-color: white !important;
+  box-shadow: 2px 2px 5px rgba(101, 101, 101, 0.5) !important;
+}
+
+::ng-deep
+  .mdc-text-field--outlined:not(
+    .mdc-text-field--disabled
+  ).mdc-text-field--focused
+  .mat-mdc-notch-piece {
+  border-color: transparent !important;
+}
+
+::ng-deep
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled)
+  .mat-mdc-notch-piece {
+  border-color: transparent !important;
+}
+
+::ng-deep .mdc-notched-outline {
+  border: 1px solid #cad5e2;
+  border-radius: calc(infinity * 1px) !important;
+}
+
+::ng-deep .mdc-text-field--outlined .mat-mdc-form-field-infix,
+.mdc-text-field--no-label .mat-mdc-form-field-infix {
+  padding-top: var(
+    --mat-form-field-container-vertical-padding,
+    10px
+  ) !important;
+  padding-bottom: var(
+    --mat-form-field-container-vertical-padding,
+    10px
+  ) !important;
+}
+::ng-deep .mat-mdc-form-field-infix {
+  min-height: var(--mat-form-field-container-height, 44px) !important;
+}
+
+::ng-deep
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled)
+  .mdc-text-field__input {
+  color: #374151 !important;
+  caret-color: #374151 !important;
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background-color: #cad5e2 !important;
+}
+
+::ng-deep
+  .mat-calendar-body-today:not(.mat-calendar-body-selected):not(
+    .mat-calendar-body-comparison-identical
+  ) {
+  border-color: #cad5e2 !important;
+}
+
+::ng-deep .mat-calendar-body-selected.mat-calendar-body-today {
+  box-shadow: none !important;
+}
+
+::ng-deep .mat-mdc-button .mat-mdc-button-persistent-ripple::before {
+  background-color: #cad5e2 !important;
+}

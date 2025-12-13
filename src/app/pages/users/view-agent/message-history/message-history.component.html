@@ -1,0 +1,21 @@
+<div class="p-8  min-h-screen ">
+  <!-- Loop through grouped data -->
+  <div *ngFor="let group of messageGroups" class="mb-6 flex">
+    <div class="basis-3/12">
+      <h2 class="text-[14px] text-black font-normal mb-3">{{ group.dateLabel }}</h2>
+    </div>
+
+    <div class="space-y-2 basis-9/12">
+      <div
+        *ngFor="let customer of group.customers"
+        class="flex items-center justify-between bg-white border border-[#CAD5E2] rounded-md px-4 py-1 hover:shadow-sm transition"
+      >
+        <span class="font-semibold text-black text-[12px]">{{ customer.name }}</span>
+        <div class="flex items-center space-x-2 font-normal text-black text-[12px]">
+          <span>{{ customer.messages }} messages</span>
+          <i class="bi bi-chevron-down"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

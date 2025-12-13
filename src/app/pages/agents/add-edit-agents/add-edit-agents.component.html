@@ -1,0 +1,251 @@
+<div class="bg-white overflow-hidden rounded-none">
+  <div
+    mat-dialog-title
+    class="bg-gradient-to-r from-cyan-300 via-green-400 via-yellow-200 to-red-300 p-4"
+  >
+    <div class="flex justify-between items-center">
+      <h2 class="text-lg font-semibold text-gray-800">Edit Agent</h2>
+      <button
+        type="button"
+        class="text-gray-700 hover:text-gray-900 font-bold"
+        (click)="closeDialog()"
+      >
+        <i class="bi bi-x-lg text-lg text-white"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <form [formGroup]="editAgentForm" (ngSubmit)="onSubmit()" mat-dialog-content>
+    <div class="flex p-6 gap-6 flex-col sm:flex-row">
+      <!-- Left Side: Profile -->
+      <!-- <div class="basis-4/12 flex flex-col items-center">
+
+        <div
+          class="w-[70%] h-2/5 bg-gray-200 rounded-md flex items-center justify-center text-5xl font-semibold text-gray-700 overflow-hidden relative"
+        >
+
+          <img
+            *ngIf="photoUrl"
+            [src]="photoUrl"
+            alt="Agent Photo"
+            class="w-full h-full object-cover"
+          />
+
+
+          <span *ngIf="!photoUrl">{{ getInitials() }}</span>
+        </div>
+
+
+        <label
+          for="photoUpload"
+          class="mt-3 bg-sky-500 hover:bg-sky-600 text-white text-sm font-medium px-4 py-2 rounded-md cursor-pointer"
+        >
+          Upload Photo
+        </label>
+        <input
+          id="photoUpload"
+          type="file"
+          accept="image/*"
+          (change)="onPhotoSelect($event)"
+          class="hidden"
+        />
+
+
+        <button
+          *ngIf="photoUrl"
+          type="button"
+          (click)="removePhoto()"
+          class="text-xs text-red-500 mt-2 hover:underline"
+        >
+          Remove Photo
+        </button>
+      </div> -->
+
+      <div class="basis-3/12 p-2" *ngIf="!isEditMode">
+        <div class="flex flex-col items-center gap-4">
+          <div
+            class="w-32 h-32 bg-gray-200 flex items-center justify-center overflow-hidden border border-gray-200"
+          >
+            <img
+              *ngIf="photoUrl"
+              [src]="photoUrl"
+              alt="Agent Photo"
+              class="object-inherit w-full h-full"
+            />
+            <div *ngIf="!photoUrl" class="text-gray-400 text-sm">No Photo</div>
+          </div>
+
+          <div class="flex flex-col items-center justify-center gap-2">
+            <!-- Upload Button -->
+            <label
+              class="flex items-center justify-center border border-black border-2 hover:bg-black text-black hover:text-white text-sm w-32 py-2 rounded-full cursor-pointer transition-all duration-500 ease-in-out"
+            >
+              {{ !photoUrl ? "Upload" : "Change" }} Photo
+              <input
+                type="file"
+                class="hidden"
+                accept=".jpg,.jpeg,.png,.gif"
+                (change)="onPhotoSelect($event)"
+              />
+            </label>
+
+            <!-- Remove Button -->
+            <button
+              *ngIf="photoUrl"
+              type="button"
+              class="flex items-center justify-center gap-1 bg-red-500 hover:bg-red-600 text-white text-sm w-32 py-2 rounded-full"
+              (click)="removePhoto()"
+            >
+              <i class="bi bi-trash"></i>
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Right Side: Fields -->
+      <div class="basis-8/12 space-y-5 w-full">
+        <!-- Agent Name (read-only) -->
+        <div>
+          <label class="block text-gray-700 text-sm font-semibold mb-1 flex"
+            >Agent Name <span class="text-[#e15050] text-[22px]">*</span></label
+          >
+          <input
+            formControlName="agentName"
+            type="text"
+            readonly
+            placeholder="Agent Name"
+            class="w-full border border-gray-300 rounded-full px-3 py-2 bg-gray-100 text-gray-600 cursor-not-allowed"
+          />
+           <span
+            *ngIf="
+              editAgentForm.get('agentName')?.invalid &&
+              editAgentForm.get('agentName')?.touched
+            "
+            class="text-left font-semibold"
+          >
+            <span class="invalid-msg"> Please enter agent name</span>
+          </span>
+        </div>
+
+        <!-- Nick Name -->
+        <div>
+          <label class="block text-gray-700 text-sm font-semibold mb-1 flex"
+            >Nick Name <span class="text-[#e15050] text-[22px]">*</span></label
+          >
+          <input
+            formControlName="nickName"
+            type="text"
+            placeholder="Nick Name"
+            class="w-full border border-gray-300 rounded-full px-3 py-2 focus:ring-1 focus:ring-sky-400 outline-none"
+          />
+          <span
+            *ngIf="
+              editAgentForm.get('nickName')?.invalid &&
+              editAgentForm.get('nickName')?.touched
+            "
+            class="text-left font-semibold"
+          >
+            <span class="invalid-msg">Please enter nick name </span>
+          </span>
+        </div>
+
+        <!-- Team Name Dropdown -->
+        <!-- Team Name Dropdown -->
+        <div class="relative">
+          <label class="block text-gray-700 text-sm font-semibold mb-1 flex">
+            Team Name <span class="text-[#e15050] text-[22px]">*</span>
+          </label>
+
+          <!-- Dropdown Trigger -->
+          <div
+            (click)="toggleDropdown()"
+            class="w-full bg-white border rounded-full px-3 py-2 flex justify-between items-center cursor-pointer focus:ring-1 focus:ring-green-400"
+          >
+            <span class="text-gray-700 text-sm">
+              {{ editAgentForm.get("teamName")?.value || "Select Team" }}
+            </span>
+            <svg
+              class="w-5 h-5 text-gray-400 transform transition-transform duration-300"
+              [class.rotate-180]="isOpen"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
+
+          <!-- Dropdown Menu -->
+          <div
+            *ngIf="isOpen"
+            class="absolute z-10 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg overflow-y-auto max-h-[200px] w-full"
+          >
+            <div
+              *ngFor="let option of supervisors"
+              (click)="selectTeam(option?.key)"
+              class="px-4 py-2 text-gray-700 text-sm hover:bg-gray-50 cursor-pointer"
+            >
+              {{ option?.value }}
+            </div>
+          </div>
+
+          <!-- Validation Message -->
+          <span
+            *ngIf="
+              editAgentForm.get('teamName')?.invalid &&
+              editAgentForm.get('teamName')?.touched
+            "
+           class="text-left font-semibold"
+          >
+           <span class="invalid-msg">Please enter team name</span>
+          </span>
+        </div>
+
+        <!-- Supervisor Name -->
+        <div>
+          <label class="block text-gray-700 text-sm font-semibold mb-1 flex"
+            >Supervisor Name</label
+          >
+          <input
+            formControlName="supervisorName"
+            type="text"
+            placeholder="Supervisor Name"
+            class="w-full border border-gray-300 rounded-full px-3 py-2 focus:ring-1 focus:ring-sky-400 outline-none"
+          />
+        </div>
+
+        <!-- Online Toggle -->
+        <div class="flex items-center justify-between pt-3">
+          <mat-slide-toggle (change)="getToogleValue($event)" formControlName="isOnline" color="primary">
+            {{ editAgentForm.get("isOnline")?.value ? "Online" : "Offline" }}
+          </mat-slide-toggle>
+
+          <div
+            *ngIf="formSubmitted && editAgentForm.invalid"
+            class="font-semibold invalid-msg text-right"
+          >
+            Please fill all required fields before saving.
+          </div>
+
+          <button
+            type="submit"
+            class="bg-black hover:bg-gray-700 text-white px-6 py-2 rounded-md font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {{ isSubmitting ? "Saving..." : "Save" }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- [class.border-red-500]="
+              editAgentForm.get('nickName')?.invalid &&
+              editAgentForm.get('nickName')?.touched
+            " -->

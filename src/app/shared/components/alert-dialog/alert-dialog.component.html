@@ -1,0 +1,50 @@
+<div
+  class="relative w-[300px] rounded-2xl p-[3px] text-center bg-gradient-to-br from-cyan-300 via-green-400 via-yellow-200 to-red-300 shadow-lg"
+
+  [ngClass]="{
+    'border-gradient-success': data.type === 'success',
+    'border-gradient-error': data.type === 'error',
+    'border-gradient-warning': data.type === 'warning'
+  }"
+>
+
+<div class=" bg-white rounded-[24px] p-5 relative z-10">
+  <!-- Icon -->
+  <div class="flex justify-center mb-3">
+    <div
+      class="w-12 h-12 flex items-center justify-center rounded-full"
+      [ngClass]="{
+        'bg-[#60BAA8] text-white': data.type === 'success',
+        'bg-red-100 text-red-600': data.type === 'error',
+        'bg-yellow-100 text-yellow-600': data.type === 'warning'
+      }"
+    >
+      <i
+        [ngClass]="{
+          'bi bi-check-lg text-4xl': data.type === 'success',
+          'bi bi-x-lg text-3xl': data.type === 'error',
+          'bi bi-exclamation-triangle text-3xl': data.type === 'warning'
+        }"
+      ></i>
+    </div>
+  </div>
+
+  <!-- Title -->
+  <h2 class="text-lg font-semibold mb-1">
+    {{ data.title }}
+  </h2>
+
+  <!-- Message -->
+  <p class="text-sm text-gray-500 mb-5">
+    {{ data.message }}
+  </p>
+
+  <!-- OK Button -->
+  <button
+    class="bg-black text-white py-2 px-6 rounded-full text-sm font-medium shadow hover:bg-gray-800 transition-all"
+    (click)="onClose()"
+  >
+    OK
+  </button>
+  </div>
+</div>

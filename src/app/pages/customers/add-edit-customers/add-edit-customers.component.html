@@ -1,0 +1,164 @@
+<div class="bg-white rounded-2xl shadow add-edit-agents">
+  <!-- Header -->
+  <div class="bg-gradient-to-r from-cyan-300 via-green-400 via-yellow-200 to-red-300 p-4 mb-0">
+    <div class="flex justify-between items-center mt-1">
+      <h2 class="text-lg font-semibold text-gray-800">
+        {{ isEditMode ? "Edit" : "Add" }} Customer
+      </h2>
+      <button type="button" class="text-gray-600 hover:text-gray-800 font-bold" (click)="closeDialog()">
+        <i class="bi bi-x-lg text-lg text-white"></i>
+      </button>
+    </div>
+  </div>
+  <form [formGroup]="editCustomerForm" (ngSubmit)="onSubmit()" class="h-full bg-white">
+    <div class="p-4 max-h-[75vh] overflow-y-auto">
+      <div class="sm:flex-row flex-col flex h-full">
+        <!-- LEFT SIDE: Photo upload (Add mode only) -->
+        <div class="basis-3/12 p-2">
+          <div class="flex flex-col items-center gap-4">
+            <div
+              class="w-32 h-32 bg-gray-200 rounded-md flex items-center justify-center overflow-hidden border border-gray-200">
+              <img *ngIf="photoUrl" [src]="photoUrl" alt="Agent Photo" class="object-inherit w-full h-full" />
+              <div *ngIf="!photoUrl" class="text-gray-400 text-sm">
+                No Photo
+              </div>
+            </div>
+
+            <div class="flex flex-col items-center justify-center gap-2">
+              <!-- Upload Button -->
+              <label
+                class="flex items-center justify-center border border-black border-2 hover:bg-black text-black hover:text-white text-sm w-32 py-2 rounded-full cursor-pointer transition-all duration-500 ease-in-out">
+                {{ !photoUrl ? "Upload" : "Change" }} Photo
+                <input type="file" class="hidden" accept=".jpg,.jpeg,.png,.gif" (change)="onPhotoSelect($event)" />
+              </label>
+
+              <!-- Remove Button -->
+              <button *ngIf="photoUrl" type="button"
+                class="flex items-center justify-center gap-1 bg-red-500 hover:bg-red-600 text-white text-sm w-32 py-2 rounded-full"
+                (click)="removePhoto()">
+                <i class="bi bi-trash"></i>
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT SIDE: Form fields -->
+        <div class="w-full p-2" [ngClass]="isEditMode ? 'basis-12/12' : 'basis-9/12'">
+          <div class="space-y-5 w-full">
+            <!-- Name -->
+            <div>
+              <label class="block text-gray-700 text-sm font-semibold mb-1 flex">
+                Customer Name
+                <div class="text-[#e15050] text-[22px]">*</div>
+              </label>
+              <input name="name" formControlName="name" type="text" placeholder="Customer Name"
+                class="w-full border border-[#CAD5E2] rounded-full px-3 py-2 focus:ring-1 focus:ring-[#CAD5E2] outline-none" />
+              <div *ngIf="f['name'].touched && f['name'].invalid" class="text-left font-semibold">
+                <span *ngIf="f['name'].errors?.['required']" class="invalid-msg">Please enter customer name</span>
+              </div>
+            </div>
+
+            <!-- Mobile -->
+            <div *ngIf="!isEditMode">
+              <label class="block text-gray-700 text-sm font-semibold flex">
+                Mobile
+                <div class="text-[#e15050] text-[22px]">*</div>
+              </label>
+
+              <div class="flex gap-2 relative mt-1">
+                <app-country-selector [selectedCountry]="editCustomerForm.value.country" (countryChange)="
+                    editCustomerForm.patchValue({ country: $event })
+                  " class="w-1/2"></app-country-selector>
+
+                <div class="w-2/3">
+                  <input type="tel" placeholder="Mobile Number" formControlName="mobile"
+                    class="w-full px-5 py-2 outline-none text-gray-700 text-sm border border-[#CAD5E2] rounded-full" />
+                </div>
+              </div>
+
+              <div *ngIf="f['mobile'].touched && f['mobile'].invalid" class="text-left font-semibold mt-1">
+                <span *ngIf="f['mobile'].errors?.['required']" class="invalid-msg">Please enter mobile number.</span>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label class="block text-gray-700 text-sm font-semibold mb-1">Email</label>
+              <input name="email" formControlName="email" type="email" placeholder="Email"
+                class="w-full border border-[#CAD5E2] rounded-full px-3 py-2 focus:ring-1 focus:ring-[#CAD5E2] outline-none" />
+            </div>
+
+            <!-- Gender -->
+            <div>
+              <label class="block text-gray-700 text-sm font-semibold mb-1">Gender</label>
+              <div class="flex items-center gap-4">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" value="Male" class="w-5 h-5" formControlName="gender" />
+                  <span class="text-sm text-gray-700" [class.font-semibold]="
+                      editCustomerForm.get('gender')?.value === 'Male'
+                    ">
+                    Male
+                  </span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" value="Female" class="w-5 h-5" formControlName="gender" />
+                  <span class="text-sm text-gray-700" [class.font-semibold]="
+                      editCustomerForm.get('gender')?.value === 'Female'
+                    ">
+                    Female
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div class="flex gap-2">
+              <!-- Birthday -->
+              <div class="w-1/2">
+                <label class="block text-gray-700 text-sm font-semibold mb-1">Birthday</label>
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>Birthday</mat-label> -->
+                  <input matInput [matDatepicker]="dob" formControlName="dob" placeholder="mm/dd/yyyy"
+                    class="custom-input" />
+                  <!-- <mat-hint></mat-hint> -->
+                  <mat-datepicker-toggle matIconSuffix [for]="dob"></mat-datepicker-toggle>
+                  <mat-datepicker #dob></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              <!-- Anniversary -->
+              <div class="w-2/3">
+                <label class="block text-gray-700 text-sm font-semibold mb-1">Anniversary</label>
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>Birthday</mat-label> -->
+                  <input matInput [matDatepicker]="doa" formControlName="doa" placeholder="mm/dd/yyyy"
+                    class="custom-input" />
+                  <!-- <mat-hint></mat-hint> -->
+                  <mat-datepicker-toggle matIconSuffix [for]="doa"></mat-datepicker-toggle>
+                  <mat-datepicker #doa></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+
+
+
+            <!-- Submit -->
+            <div class="m-0">
+              <div class="flex items-center justify-end w-full gap-2">
+                <!-- Error message at bottom -->
+                <div *ngIf="formSubmitted && editCustomerForm.invalid" class="font-semibold invalid-msg text-right">
+                  Please fill all required fields before saving.
+                </div>
+
+                <!-- only one trigger -->
+                <button type="submit" class="bg-black hover:bg-gray-700 text-white px-6 py-2 rounded-md font-medium ">
+                  {{ isEditMode ? "Update" : "Save" }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

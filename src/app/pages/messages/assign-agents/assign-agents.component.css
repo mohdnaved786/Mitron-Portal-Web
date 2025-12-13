@@ -1,0 +1,17 @@
+.status-online {
+  font-size: 9px !important;
+  padding: 0px 8px !important;
+  background-color: #64bcac;
+  color: #fff;
+  border-radius: 4px !important;
+  letter-spacing: 0.7px;
+}
+
+.status-offline {
+  font-size: 9px !important;
+  padding: 0px 8px !important;
+  background-color: #e45c64;
+  color: #fff;
+  border-radius: 4px !important;
+  letter-spacing: 0.7px;
+}

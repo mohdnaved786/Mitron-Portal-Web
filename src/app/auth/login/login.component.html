@@ -1,0 +1,95 @@
+<div class="h-screen w-screen bg-center flex items-center justify-center
+            bg-[linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)),url('/images/office.jpg')]
+            bg-cover raleway">
+
+    <!-- Transparent Gradient Login Box -->
+    <div class="bg-gradient-to-br
+            from-cyan-400/80
+            via-green-700/80
+            via-yellow-300/80
+            to-red-600/80
+         rounded-3xl shadow-2xl w-full max-w-sm text-center">
+        <div class="p-5">
+            <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="p-4">
+
+                <!-- Logo -->
+                <div class="flex justify-center mb-6">
+                    <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Logo"
+                        class="w-20 h-20 rounded-full">
+                </div>
+
+                <!-- Username -->
+                <div class="relative mb-4">
+                    <span class="absolute left-4 top-3 text-gray-500 text-lg">
+                        <span class="material-symbols-outlined font-light">account_circle</span>
+                    </span>
+                    <input type="text" placeholder="Email" name="email" formControlName="email" class="w-full pl-12 pr-4 py-3 rounded-2xl shadow focus:outline-none
+             text-gray-500 placeholder-gray-500 text-base">
+                    <!-- Error -->
+                    <div *ngIf="f['email'].touched && f['email'].invalid" class="text-left font-semibold">
+                        <span *ngIf="f['email'].errors?.['required']" class="invalid-msg">Email is required.</span>
+                        <span *ngIf="f['email'].errors?.['email']" class="invalid-msg">Enter a valid email.</span>
+                    </div>
+
+                </div>
+
+                <!-- Password -->
+                <div class="relative mb-2">
+                    <span class="absolute left-4 top-3 text-gray-500 text-lg">
+                        <span class="material-symbols-outlined font-light">lock</span>
+                    </span>
+                    <input [type]="showPassword ? 'text' : 'password'" placeholder="Password" name="password"
+                        formControlName="password" class="w-full pl-12 pr-10 py-3 rounded-2xl shadow focus:outline-none
+             text-gray-500 placeholder-gray-500 text-base">
+                    <button type="button" class="absolute right-4 top-3 cursor-pointer text-gray-500 text-lg font-thin"
+                        (click)="togglePasswordVisibility()">
+                        <span class="material-symbols-outlined font-light" *ngIf="!showPassword">visibility</span>
+                        <span class="material-symbols-outlined font-light" *ngIf="showPassword">visibility_off</span>
+                    </button>
+
+                    <!-- Error -->
+                    <div *ngIf="f['password'].touched && f['password'].invalid" class="text-left font-semibold">
+                        <span *ngIf="f['password'].errors?.['required']" class="invalid-msg">Password is
+                            required.</span>
+                    </div>
+
+                </div>
+
+                 <!-- Inline error message -->
+                <div *ngIf="loginError"
+                    [ngClass]="loginError === 'Login Successful' ? 'bg-green-100 text-green-600' : 'bg-[#DD0A0DB2] text-white'"
+                    class="text-xs px-2 py-1 mb-4 mx-auto flex justify-between items-center max-w-[600px]">
+                    <span>{{ loginError }}</span>
+                    <button type="button" (click)="loginError=''"
+                        class="font-thin text-[32px] text-white hover:text-gray-200 mb-1">&times;</button>
+                </div>
+
+                <!-- Forgot Password -->
+                <div class="text-right mb-10">
+                    <a href="#" class="text-sm text-white hover:underline">Forgot Password</a>
+                </div>
+
+                <!-- Login Button -->
+                <button type="submit"
+                    class="w-full bg-black text-white py-3 rounded-2xl shadow hover:bg-gray-800 mb-2 mt text-base font-semibold btn-submit"
+                    [disabled]="loginForm.invalid || isSubmitting">
+                    <span *ngIf="!isSubmitting">LOGIN</span>
+                    <span *ngIf="isSubmitting">PROCESSING...</span>
+                </button>
+
+            </form>
+
+
+            <!-- Divider Line -->
+            <div class=" pt-4">
+                <!-- Footer Buttons -->
+                <div class="flex justify-between text-[11px] ">
+                    <a routerLink="/" class="text-white hover:underline border-t border-white pt-2">BACK TO
+                        WEBSITE</a>
+                    <a routerLink="/" class="text-white hover:underline border-t border-white pt-2">SHOW FULL VIDEO</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

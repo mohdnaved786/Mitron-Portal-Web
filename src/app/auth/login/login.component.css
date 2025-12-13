@@ -1,0 +1,20 @@
+body {
+  padding-bottom: 0px !important;
+}
+
+.raleway {
+  font-family: "Raleway", sans-serif !important;
+}
+.btn-submit:disabled {
+  background-color: #4D4D4D;
+    color: #ffffffb5;
+  cursor: not-allowed; /* Indicates non-interactive state */
+  opacity: 0.9;
+}
+
+
+.invalid-msg{
+  color: rgb(225, 80, 80);
+  font-size: 12px;
+  margin-left: 12px;
+}

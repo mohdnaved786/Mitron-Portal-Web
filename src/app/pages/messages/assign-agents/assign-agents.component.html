@@ -1,0 +1,229 @@
+<div class="flex flex-col w-full max-w-xl mx-auto h-screen border overflow-hidden">
+  <!-- Header -->
+  <!-- Search Bar -->
+  <!-- px-3 py-1 flex items-center justify-between bg-[#eaeef7] shadow-md overflow-hidden -->
+  <div
+    class="flex items-center justify-between py-[0.45rem] px-4 bg-gradient-to-r from-cyan-300 via-green-400 via-yellow-200 to-red-300">
+    <h6 class="text-sm sm:text-md md:text-lg font-semibold text-gray-900">
+      Assign Agents
+    </h6>
+
+    <!-- Assign Button -->
+    <div class="flex items-center gap-2">
+      <button
+        class="px-3 py-1 bg-black hover:bg-[#000000cf] text-white rounded text-sm disabled:bg-gray-400 disabled:cursor-not-allowed"
+        [disabled]="!selectedAgent" (click)="assignAgent()">
+        Assign
+      </button>
+
+      <button class="p-2 text-white" (click)="close()">
+        <i class="bi bi-x-lg text-[22px]"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="flex-1 p-4 overflow-y-auto space-y-2 bg-gray-50 relative">
+    <div class="rounded-xl overflow-hidden">
+      <!-- Contact List -->
+      <div class="flex items-center justify-center p-4">
+        <div class="relative flex-1">
+          <input type="text" placeholder="search" [(ngModel)]="searchText" (input)="filterAgents()"
+            class="w-full pl-10 py-[4px] text-sm text-[#7a8ea7] placeholder-[#7a8ea7] border-[1px] border-[#7a8ea7] rounded-full focus:outline-none focus:ring-1 focus:ring-[#7a8ea7]" />
+          <span
+            class="material-symbols-outlined w-4 h-4 text-[#7a8ea7] absolute left-3 top-[15px] transform -translate-y-1/2 text-[20px]">
+            search
+          </span>
+        </div>
+      </div>
+
+      <!-- <div class="divide-y divide-gray-200">
+        <div class="space-y-2">
+          <div *ngFor="let agent of filteredAgents"
+            class="flex items-center justify-between px-1 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-200">
+            <div class="flex items-center gap-3">
+             
+              <input type="radio" name="selectedAgent" [value]="agent" (change)="onAgentSelect(agent)"
+                class="w-4 h-4 cursor-pointer" />
+              <div class="relative">
+                <div
+                  class="w-8 h-8 bg-[#E0E0E0] rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-md font-semibold text-[#A0A0A0] border border-[#A0A0A0]">
+                  <ng-container *ngIf="agent.profile_image; else initials">
+                    <img [src]="agent.profile_image" alt="" class="w-full h-full object-cover" />
+                  </ng-container>
+                  <ng-template #initials>
+                    {{ getInitials(agent.name) }}
+                  </ng-template>
+                </div>
+                <span
+                  class="absolute top-[0px] right-[1px] block w-2 h-2 rounded-full border border-[#fff] border-[1.5px]"
+                  [ngStyle]="{
+                    backgroundColor: statusColor(agent.status)
+                  }"></span>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <div>
+                  <p class="font-semibold text-gray-900 text-sm">
+                    {{ agent.name }}
+                  </p>
+                  <p class="text-xs text-gray-500">{{ agent.email }}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500">
+                  
+                    {{ agent.updated_at | date : "hh:mm a" }}
+                  </p>
+                  <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-md" [ngClass]="{
+                      'status-online': agent.status === 1,
+                      'status-offline': agent.status === 0
+                    }">
+                    {{ agent.status === 1 ? "ONLINE" : "OFFLINE" }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+
+
+      <!-- new code for alignment -->
+
+      <div class="divide-y divide-gray-200">
+        <div class="space-y-2">
+
+          <div *ngFor="let agent of filteredAgents"
+            class="flex items-center justify-between px-1 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-200">
+
+            <!-- LEFT SECTION -->
+            <div class="flex items-center gap-3">
+
+              <!-- Radio -->
+              <input type="radio" name="selectedAgent" [value]="agent" (change)="onAgentSelect(agent)"
+                class="w-4 h-4 cursor-pointer" />
+
+              <!-- Avatar + Status -->
+              <div class="relative">
+                <div
+                  class="w-8 h-8 bg-[#E0E0E0] rounded-full overflow-hidden flex items-center justify-center text-md font-semibold text-[#A0A0A0] border border-[#A0A0A0]">
+                  <ng-container *ngIf="agent.profile_image; else initials">
+                    <img [src]="agent.profile_image" alt="" class="w-full h-full object-cover" />
+                  </ng-container>
+                  <ng-template #initials>
+                    {{ getInitials(agent.name) }}
+                  </ng-template>
+                </div>
+
+                <span class="absolute top-0 right-0 block w-2 h-2 rounded-full border border-white"
+                  [ngStyle]="{ backgroundColor: statusColor(agent.status) }"></span>
+              </div>
+
+              <!-- Name + Email -->
+              <div class="leading-tight">
+                <p class="font-semibold text-gray-900 text-sm">
+                  {{ agent.name }}
+                </p>
+                <p class="text-xs text-gray-500">
+                  {{ agent.email }}
+                </p>
+              </div>
+
+            </div>
+
+            <!-- RIGHT SECTION (Time + Status) -->
+            <div class="text-right">
+              <!-- <p class="text-xs text-gray-500">
+                {{ agent.updated_at | date : "hh:mm a" }}
+              </p> -->
+
+              <p class="text-xs text-gray-500">
+                {{ agent.status === 1 ? getOnlineDuration(agent.updated_at) : "" }}
+              </p>
+
+
+              <span class="px-2 py-0.5 mt-1 inline-flex text-xs font-semibold rounded-md" [ngClass]="{
+            'status-online': agent.status === 1,
+            'status-offline': agent.status === 0
+          }">
+                {{ agent.status === 1 ? "ONLINE" : "OFFLINE" }}
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+<!-- <div
+        class="px-3 py-4 flex flex-wrap items-center justify-between border-t border-gray-200 bg-[#eaeef7] gap-3 overflow-hidden">
+        <div class="flex items-center text-xs text-gray-500 space-x-2 flex-wrap w-24">
+            <span>Items per page:</span>
+            <div class="relative">
+                <select class="p-1 pr-6 rounded-md border-[1.5px] border-[#7d8da4] bg-white text-xs appearance-none">
+                    <option *ngFor="let option of [10, 20, 50]">
+                        {{ option }}
+                    </option>
+                </select>
+                <svg class="w-4 h-4 text-gray-500 absolute right-1.5 top-1/2 transform -translate-y-1/2 pointer-events-none"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                    </path>
+                </svg>
+            </div>
+        </div> -->
+<!-- Pagination --
+        <!-- <div class="px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between bg-[#eaeef7] gap-3">
+            <div class="flex flex-wrap gap-[0.5px] overflow-hidden border-[1.5px] border-[#7d8da4] bg-white rounded-md">
+                <!-- First Page --
+                <button class="p-1 bg-[#eaeef7] text-gray-400 hover:bg-[#b6becd] hover:text-white disabled:opacity-50"
+                    [disabled]="currentPage === 1" (click)="firstPage()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <!-- Previous Page --
+                <button class="p-1 bg-[#eaeef7] text-gray-500 hover:bg-[#b6becd] hover:text-white"
+                    [disabled]="currentPage === 1" (click)="prevPage()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                        </path>
+                    </svg>
+                </button>
+
+                <!-- Page Numbers --
+                <div class="bg-[#eaeef7] flex gap-[0.5px]">
+                    <button *ngFor="let page of pagination" (click)="onPageClick(page)"
+                        [disabled]="page === '...' || page === currentPage" [ngClass]="{
+                  'bg-[#7a8ea7] text-white': page === currentPage,
+                  'bg-white text-gray-500 hover:bg-[#b6becd] hover:text-white':
+                    page !== currentPage && page !== '...'
+                }" class="px-2 py-1 text-xs font-medium">
+                        {{ page }}
+                    </button>
+                </div>
+
+                <!-- Next Page --
+                <button class="p-1 bg-[#eaeef7] text-gray-500 hover:bg-[#b6becd] hover:text-white"
+                    [disabled]="currentPage === totalPages" (click)="nextPage()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                        </path>
+                    </svg>
+                </button>
+                <!-- Last Page --
+                <button class="p-1 bg-[#eaeef7] text-gray-400 hover:bg-[#b6becd] hover:text-white disabled:opacity-50"
+                    [disabled]="currentPage === totalPages" (click)="lastPage()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>-->

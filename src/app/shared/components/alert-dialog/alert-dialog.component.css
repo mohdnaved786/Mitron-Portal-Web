@@ -1,0 +1,16 @@
+/* @layer components {
+  .border-gradient-success {
+    border-image: linear-gradient(to right, #60d394, #a3f7bf);
+    border-image-slice: 1;
+  }
+
+  .border-gradient-error {
+    border-image: linear-gradient(to right, #ff6b6b, #ff8c8c);
+    border-image-slice: 1;
+  }
+
+  .border-gradient-warning {
+    border-image: linear-gradient(to right, #fdbb2d, #ffed4b);
+    border-image-slice: 1;
+  }
+} */

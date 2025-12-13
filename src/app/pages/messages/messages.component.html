@@ -1,0 +1,552 @@
+<main>
+  <section class="bg-gray-50 p-4 sm:p-6 md:p-8">
+    <div class="container max-w-5xl mx-auto">
+      <div
+        class="flex flex-col sm:flex-row sm:justify-between sm:items-center popins gap-4 mb-3"
+      >
+        <!-- Left -->
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3"
+        >
+          <h2
+            class="text-lg sm:text-xl md:text-2xl font-medium text-gray-900 my-2 sm:my-4 ms-2"
+          >
+            Messages
+          </h2>
+
+          <!-- Tabs -->
+          <div
+            class="flex rounded-md shadow-sm overflow-hidden border-[1.5px] border-black text-xs sm:text-xs poppins"
+          >
+            <button
+              class="px-3 py-2 font-medium transition-colors border-r border-black"
+              [ngClass]="{
+                'bg-black text-white hover:bg-gray-700': selectedTab === 'ALL',
+                'bg-white text-gray-700 hover:bg-gray-100':
+                  selectedTab !== 'ALL'
+              }"
+              (click)="selectTab('ALL')"
+            >
+              ALL
+            </button>
+
+            <button
+              class="px-3 py-2 font-medium transition-colors border-r border-black"
+              [ngClass]="{
+                'bg-black text-white hover:bg-gray-700':
+                  selectedTab === 'NOT_REPLIED',
+                'bg-white text-gray-700 hover:bg-gray-100':
+                  selectedTab !== 'NOT_REPLIED'
+              }"
+              (click)="selectTab('NOT_REPLIED')"
+            >
+              READ
+            </button>
+
+            <button
+              class="px-3 py-2 font-medium transition-colors"
+              [ngClass]="{
+                'bg-black text-white hover:bg-gray-700':
+                  selectedTab === 'REPLIED',
+                'bg-white text-gray-700 hover:bg-gray-100':
+                  selectedTab !== 'REPLIED'
+              }"
+              (click)="selectTab('REPLIED')"
+            >
+              UNREAD
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- <button
+            class="px-3 py-2 bg-black hover:bg-[#000000cf] text-white rounded text-sm"
+            (click)="openQuickReply()"
+          >
+            Quick Reply
+          </button> -->
+
+          <!-- Bulk selection toggle button -->
+          <!-- <button
+            class="px-3 py-2 bg-black hover:bg-[#000000cf] text-white rounded text-sm"
+            (click)="toggleBulkSelectMode()"
+          >
+            {{ bulkSelectMode ? "Cancel Selection" : "Select Messages" }}
+          </button> -->
+
+           <button [disabled]="selectedAgent"
+            class="px-3 py-2 bg-black font-bold hover:bg-[#000000cf] text-white rounded text-sm disabled:bg-gray-400 disabled:cursor-not-allowed"
+            (click)="assignAgent()"
+          >
+           ASSIGN AGENT
+          </button>
+
+          <button
+            class="bg-[#EB5757] text-white py-[2px] px-[10px] rounded-md hover:bg-[#EB5757D4] assign-btn"
+            (click)="refreshList()"
+          >
+            <div class="d-flex items-center justify-center">
+              <i class="bi bi-arrow-repeat text-2xl"></i>
+            </div>
+          </button>
+
+          <div
+            class="relative w-12 h-12 flex items-center justify-center rounded-full"
+          >
+            <!-- Circular border spinner -->
+            <svg class="w-full h-full transform -rotate-90">
+              <circle
+                cx="24"
+                cy="24"
+                r="20"
+                stroke="#d7dedf"
+                stroke-width="4"
+                fill="none"
+              />
+              <circle
+                cx="24"
+                cy="24"
+                r="20"
+                stroke="#1cb4dc"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+                [attr.stroke-dasharray]="circumference"
+                [attr.stroke-dashoffset]="dashOffset"
+                class="transition-all duration-1000 ease-linear"
+              />
+            </svg>
+
+            <!-- Percentage text -->
+            <!-- <span class="absolute text-[17px] font-semibold text-gray-800 z-10 poppins">
+                            {{ loadPercent }}
+                        </span> -->
+            <span
+              class="absolute text-[17px] font-semibold text-gray-800 z-10 poppins"
+            >
+              {{ refreshCountdown }}
+            </span>
+
+            <div
+              class="absolute z-1 w-7 h-7 flex items-center justify-center bg-gray-200 rounded-full w-[36px] h-[36px]"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden raleway"
+      >
+        <!-- Header sm:px-6 -->
+        <div
+          class="px-4 py-2 flex flex-wrap items-center justify-between bg-[#eaeef7] gap-3"
+        >
+          <div
+            class="flex flex-wrap items-center space-x-2 text-sm text-gray-500"
+          >
+           <input
+            type="checkbox"
+            [(ngModel)]="selectAll"
+            (change)="toggleSelectAll()"
+            class="w-4 h-4"
+          />
+            <span>{{ items.length }} of {{ totalItems }} Messages</span>
+            <span class="text-gray-400">|</span>
+            <span>No filters applied</span>
+          </div>
+          <div class="flex items-center space-x-2 w-full sm:w-auto">
+            <div class="relative flex-1 sm:flex-none">
+              <input
+                type="text"
+                placeholder="search"
+                [(ngModel)]="searchQuery"
+                (input)="filterItems(['wa_name', 'wa_number'])"
+                class="w-full pl-10 py-[4px] text-sm text-[#7a8ea7] placeholder-[#7a8ea7] border-[1.5px] border-[#7a8ea7] rounded-full focus:outline-none focus:ring-1 focus:ring-[#7a8ea7]"
+              />
+              <span
+                class="material-symbols-outlined w-4 h-4 text-[#7a8ea7] absolute left-3 top-1/2 transform -translate-y-1/2 text-[20px]"
+              >
+                search
+              </span>
+            </div>
+            <button
+              class="flex items-center justify-center w-10 h-10 text-[#7a8ea7] rounded-full hover:bg-[#7a8ea742] transition-all duration-300 ease-in-out"
+              [ngClass]="{
+                'bg-[#7a8ea742]': showFilters,
+                'hover:bg-[#7a8ea742]': !showFilters
+              }"
+              (click)="toggleFilterDropdown()"
+            >
+              <span class="material-symbols-outlined text-[24px]"
+                >filter_alt</span
+              >
+            </button>
+          </div>
+        </div>
+
+        <!-- Header for Select All (only visible in bulk mode) -->
+        <!-- <div
+          *ngIf="true"
+          class="flex items-center px-4 py-2 bg-[#f5f5f5] border-b border-gray-200"
+        >
+          <input
+            type="checkbox"
+            [(ngModel)]="selectAll"
+            (change)="toggleSelectAll()"
+            class="w-4 h-4"
+          />
+          <span class="ml-2 text-sm text-gray-600">Assign Agents</span>
+        </div> -->
+
+        <!-- Inputs Filter slider -->
+        <div
+          class="overflow-hidden transition-all duration-500 ease-in-out"
+          [style.maxHeight]="showFilters ? '250px' : '0'"
+          [style.opacity]="showFilters ? '1' : '0'"
+        >
+          <!-- Filter Section -->
+          <div
+            class="bg-[#eaeef7] px-4 sm:px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row flex-wrap gap-5 transition-all duration-300 ease-in-out"
+          >
+            <!-- Agent Dropdown -->
+            <div class="flex flex-col">
+              <label
+                for="agent"
+                class="text-[10px] font-medium text-gray-700 mb-1 uppercase"
+                >Customer</label
+              >
+              <select
+                id="agent"
+                class="pe-20 ps-2 py-2 border-none rounded-0 text-xs focus:outline-none focus:ring-1 focus:ring-[#7a8ea7] font-semibold"
+              >
+                <option value="">All</option>
+                <option *ngFor="let customer of customers" [value]="customer">
+                  {{ customer }}
+                </option>
+              </select>
+            </div>
+
+            <div class="flex flex-col">
+              <label
+                for="type"
+                class="text-[10px] font-medium text-gray-700 mb-1 uppercase"
+                >Type</label
+              >
+              <select
+                id="type"
+                class="pe-20 ps-2 py-2 border-none rounded-0 text-xs focus:outline-none focus:ring-1 focus:ring-[#7a8ea7] font-semibold"
+              >
+                <option value="">All</option>
+                <option *ngFor="let type of types" [value]="type">
+                  {{ type }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table (responsive wrapper) -->
+        <div class="">
+          <div class="divide-y divide-gray-200">
+            <!-- Another Item -->
+            <div
+              class="flex flex-col md:flex-row md:items-start md:justify-between py-2 hover:bg-gray-50 pe-2"
+              *ngFor="let msg of filteredMessages"
+            >
+
+
+              <!-- <input type="checkbox" [(ngModel)]="msg.selected" (change)="checkSelectAllStatus()"
+                                class="w-4 h-4" /> -->
+              <div class="flex items-center space-x-3 w-[70%]">
+                <div class="ps-4">
+                   <input
+                *ngIf="true"
+                type="checkbox"
+                [(ngModel)]="msg.selected"
+                (change)="checkSelectAllStatus()"
+                class="w-4 h-4"
+              />
+                </div>
+                <div
+                  class="w-12 h-12 bg-[#E0E0E0] rounded-full flex-shrink-0 flex items-center justify-center text-lg font-semibold text-[#A0A0A0] border border-[#A0A0A0] relative"
+                >
+                  <ng-container *ngIf="msg.wa_media_url; else initials">
+                    <img
+                      [src]="msg.wa_media_url"
+                      alt="profile"
+                      class="w-12 h-12 rounded-full"
+                    />
+                  </ng-container>
+                  <ng-template #initials>
+                    {{ getInitials(msg.wa_name) }}
+                  </ng-template>
+
+                  <div
+                    class="flex items-center justify-center absolute -bottom-2 rounded-full h-[20px] w-[20px] border border-white border-1 bg-[#dd0a0d]"
+                  >
+                    <i
+                      class="bi bi-flag mt-0.5"
+                      style="font-size: 10px; color: white"
+                    ></i>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="text-xs text-black italic">
+                    {{ getTimeAgo(msg.received_at) }}
+                  </div>
+                  <div class="flex flex-wrap items-center gap-2 text-black">
+                    <span class="font-bold text-sm">{{
+                      msg.wa_name || "-"
+                    }}</span>
+                    <span class="text-sm">| {{ msg.wa_number || "-" }} |</span>
+                    <div
+                      class="flex flex-wrap gap-1 bg-[#7a8ea7] text-white rounded px-1 py-0"
+                    >
+                      <span
+                        class="text-sm px-1.5 py-[0.1rem]"
+                        *ngFor="let type of msg.wa_types"
+                      >
+                        <ng-container *ngIf="type === 'text'; else icon">
+                          A
+                        </ng-container>
+                        <ng-template #icon>
+                          <i [class]="getIcon(type)"></i>
+                        </ng-template>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex gap-2 items-center pt-2">
+                    <!-- <p class="text-gray-500 text-xs mt-1 wrap-msg mt-0">
+                                            {{ msg.wa_req_message || "-" }}
+                                        </p>
+                                        <button (click)="openModal(msg)"
+                                            class="underline text-[10px] hover:text-blue-600">
+                                            Read more...
+                                        </button> -->
+                    <!-- IMAGE MESSAGE -->
+                    <p
+                      *ngIf="msg.wa_type === 'image'"
+                      class="text-[#7a8ea7] text-xs mt-1"
+                    >
+                      <span class="text-xs"
+                        >{{ msg.image_count || 1 }} image{{
+                          (msg.image_count || 1) > 1 ? "s" : ""
+                        }}
+                        |</span
+                      >
+                      <span *ngIf="msg.video_count">
+                        {{ msg.video_count }} video{{
+                          msg.video_count > 1 ? "s" : ""
+                        }}
+                        |</span
+                      >
+                      <span class="text-xs">{{
+                        msg.wa_caption || msg.wa_img_caption || ""
+                      }}</span>
+                    </p>
+
+                    <!-- VIDEO MESSAGE -->
+                    <p
+                      *ngIf="msg.wa_type === 'video'"
+                      class="text-[#7a8ea7] text-xs mt-1"
+                    >
+                      <span class="text-xs"
+                        >{{ msg.video_count || 1 }} video{{
+                          (msg.video_count || 1) > 1 ? "s" : ""
+                        }}</span
+                      >
+                      <span class="text-xs">| {{ msg.wa_caption || "" }}</span>
+                    </p>
+
+                    <p class="text-gray-500 text-xs wrap-msg">
+                      {{ msg.wa_req_message || "" }}
+                    </p>
+
+                    <!-- <button *ngIf="isOverflowing(msgText, 250)" (click)="openModal(msg)"
+                                            class="underline text-[10px] hover:text-blue-600">
+                                            Read more...
+                                        </button> -->
+                  </div>
+                </div>
+              </div>
+              <div
+                class="flex items-center space-x-2 mt-3 md:mt-0 md:self-center pe-8 justify-center"
+              >
+                <span
+                  class="bg-[#e45c64] text-white px-3 py-[6px] rounded text-xs flex items-center"
+                  >{{ msg.read_status }}</span
+                >
+                <button
+                  class="bg-black text-white text-xs px-2 py-[6px] rounded font-semibold"
+                  (click)="openViewReply(msg)"
+                >
+                  VIEW / REPLY
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div
+          class="px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between border-t border-gray-200 bg-[#eaeef7] gap-3"
+        >
+          <div class="flex items-center text-sm text-gray-500 space-x-2">
+            <span>Items per page:</span>
+            <div class="relative">
+              <select
+                [(ngModel)]="per_page"
+                (change)="loadData(1)"
+                class="p-1 pr-6 rounded-md border-[1.5px] border-[#7d8da4] bg-white text-sm appearance-none"
+              >
+                <option *ngFor="let option of [10, 20, 50]">
+                  {{ option }}
+                </option>
+              </select>
+              <svg
+                class="w-4 h-4 text-gray-500 absolute right-1.5 top-1/2 transform -translate-y-1/2 pointer-events-none"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                ></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div
+            class="px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between bg-[#eaeef7] gap-3"
+          >
+            <div
+              class="flex flex-wrap gap-[0.5px] overflow-hidden border-[1.5px] border-[#7d8da4] bg-white rounded-md"
+            >
+              <!-- First Page -->
+              <button
+                class="p-1 bg-[#eaeef7] text-gray-400 hover:bg-[#b6becd] hover:text-white disabled:opacity-50"
+                [disabled]="currentPage === 1"
+                (click)="firstPage()"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+                  ></path>
+                </svg>
+              </button>
+              <!-- Previous Page -->
+              <button
+                class="p-1 bg-[#eaeef7] text-gray-500 hover:bg-[#b6becd] hover:text-white"
+                [disabled]="currentPage === 1"
+                (click)="prevPage()"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  ></path>
+                </svg>
+              </button>
+
+              <!-- Page Numbers -->
+              <div class="bg-[#eaeef7] flex gap-[0.5px]">
+                <button
+                  *ngFor="let page of pagination"
+                  (click)="typeof page === 'number' && goToPage(page)"
+                  [disabled]="page === '...' || page === currentPage"
+                  [ngClass]="{
+                    'bg-[#7a8ea7] text-white': page === currentPage,
+                    'bg-white text-gray-500 hover:bg-[#b6becd] hover:text-white':
+                      page !== currentPage && page !== '...'
+                  }"
+                  class="px-2 py-1 text-sm font-medium"
+                >
+                  {{ page }}
+                </button>
+              </div>
+
+              <!-- Next Page -->
+              <button
+                class="p-1 bg-[#eaeef7] text-gray-500 hover:bg-[#b6becd] hover:text-white"
+                [disabled]="currentPage === totalPages"
+                (click)="nextPage()"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  ></path>
+                </svg>
+              </button>
+              <!-- Last Page -->
+              <button
+                class="p-1 bg-[#eaeef7] text-gray-400 hover:bg-[#b6becd] hover:text-white disabled:opacity-50"
+                [disabled]="currentPage === totalPages"
+                (click)="lastPage()"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 5l7 7-7 7M5 5l7 7-7 7"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Modal for message details -->
+<div
+  *ngIf="selectedItem"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div class="bg-white p-4 rounded-lg shadow-lg max-w-xs w-full relative">
+    <button
+      (click)="closeModal()"
+      class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-[27px]"
+    >
+      &times;
+    </button>
+    <p class="text-sm text-gray-700 break-words me-10">
+      {{ selectedItem.wa_req_message || "-" }}
+    </p>
+  </div>
+</div>

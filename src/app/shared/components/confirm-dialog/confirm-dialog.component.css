@@ -1,0 +1,28 @@
+* {
+  font-family: "Raleway", sans-serif !important;
+}
+
+.confirm-dialog {
+  border-radius: 16px !important;
+  background: linear-gradient(
+    to bottom right,
+    #67e8f9,
+    #4ade80,
+    #fde047,
+    #fca5a5
+  );
+  padding: 2px;
+}
+
+.confirm-dialog-content {
+  background-color: white !important;
+  border-radius: 16px;
+  text-align: center;
+}
+::ng-deep .mat-mdc-dialog-surface {
+    border-radius: 16px;
+}
+
+::ng-deep .mat-mdc-dialog-container .mat-mdc-dialog-title {
+  font-weight: 600 !important;
+}

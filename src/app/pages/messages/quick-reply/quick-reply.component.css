@@ -1,0 +1,7 @@
+.sendMesBtn{
+    transform: rotate(45deg);
+}
+
+::ng-deep .mat-mdc-dialog-surface{
+  overflow-y:unset !important;
+}

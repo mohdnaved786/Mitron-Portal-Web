@@ -1,0 +1,65 @@
+<!-- Inputs Filter slider -->
+<div class="h-[100%] bg-[#eaeef7] px-4 sm:px-6 py-1">
+    <!-- Filter Section -->
+    <div class="">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="font-bold text-gray-800">Quick Reply</h2>
+            </div>
+
+            <div class="flex items-center space-x-2 w-full sm:w-auto">
+                <div class="relative flex-1 sm:flex-none ps-auto w-90">
+                    <input type="text" placeholder="Search"
+                        class=" pl-10 py-[5px] text-sm text-[#7a8ea7] placeholder-[#7a8ea7] rounded-full focus:outline-none focus:ring-1 focus:ring-[#7a8ea7]" />
+                    <span
+                        class="material-symbols-outlined w-4 h-4 text-[#7a8ea7] absolute left-3 top-1/2 transform -translate-y-1/2 text-[20px]">
+                        search
+                    </span>
+                </div>
+
+                <button class="p-2 text-white" (click)="close()">
+                    <i class="bi bi-x-lg text-[22px] text-[#62748E]"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Messages Section -->
+        <div class="mt-2">
+
+            <!-- Frequently Used Section -->
+            <div class="">
+                <h3 class="text-sm text-gray-700 font-semibold mb-3">FREQUENTLY USED BY YOU</h3>
+                <div class="space-y-1 max-h-48 overflow-y-auto">
+                    <div *ngFor="let msg of frequentlyUsedMessages"
+                        class="flex justify-between gap-5 items-center w-full bg-white text-gray-800 px-4 py-1 rounded-lg hover:bg-gray-200 border border-[#CAD5E2] border-1.5 ">
+                        <span class="text-xs text-white font-medium bg-[#62748E] rounded-md p-1 px-1">{{ msg.title
+                            }}</span>
+                        <span class="text-xs">{{ msg.text }}</span>
+                        <button (click)="sendMessage(msg.text)" type="submit" class="text-gray-500 hover:text-gray-700 sendMesBtn">
+                            <i class="bi bi-send text-md"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- All Quick Messages Section (scrollable) -->
+            <div class="mt-4">
+                <h3 class="text-sm text-gray-700 font-semibold mb-3">ALL THE QUICK MESSAGES</h3>
+                <div class="space-y-1 max-h-48 overflow-y-auto">
+                    <div *ngFor="let msg of allMessages"
+                        class="flex justify-between gap-5 items-center w-full bg-white text-gray-800 px-4 py-1 rounded-lg hover:bg-gray-200 border border-[#CAD5E2] border-1.5 ">
+                        <span class="text-xs text-white font-medium bg-[#62748E] rounded-md p-1 px-1">{{ msg.title
+                            }}</span>
+                        <span class="text-xs">{{ msg.text }}</span>
+                        <button (click)="sendMessage(msg.text)" type="submit" class="text-gray-500 hover:text-gray-700 sendMesBtn">
+                            <i class="bi bi-send text-md"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

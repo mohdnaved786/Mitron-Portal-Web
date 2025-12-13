@@ -1,0 +1,51 @@
+<div class="p-8 min-h-screen">
+  <div *ngFor="let group of messageGroups" class="mb-6 flex">
+
+    <!-- Date Label -->
+    <div class="basis-3/12">
+      <h2 class="text-[16px] text-black font-semibold mb-3">{{ group.dateLabel }}</h2>
+    </div>
+
+    <!-- Customer List -->
+    <div class="space-y-2 basis-9/12">
+
+      <div *ngFor="let customer of group.customers" class="flex flex-col">
+
+        <!-- Customer Row -->
+        <div
+          class="bg-white border border-[#CAD5E2] rounded-md px-4 py-2 flex items-center justify-between cursor-pointer hover:shadow-sm transition"
+          [ngClass]="{'bg-[#EAEEF7] rounded-b-none': customer.showMessages, 'bg-white': !customer.showMessages}"
+          (click)="toggleFilterDropdown(customer)">
+          <span class="font-semibold text-black text-[12px]">{{ customer.name || '-' }}</span>
+
+          <div class="flex items-center space-x-2 text-[12px]">
+            <p class="font-semibold">
+              {{ customer.messages }}
+              <span class="text-[#62748E] font-normal">messages</span>
+            </p>
+
+            <!-- Arrow Icon Rotate -->
+            <i class="bi bi-chevron-down transition-transform duration-300"
+              [class.rotate-180]="customer.showMessages"></i>
+          </div>
+        </div>
+
+        <!-- Dropdown Panel (list content) -->
+        <div class="overflow-hidden transition-all duration-300 ease-in-out"
+          [style.maxHeight]="customer.showMessages ? '500px' : '0'" [style.opacity]="customer.showMessages ? '1' : '0'">
+          <div class="bg-white border border-t-0 border border-[#EAEEF7]">
+            <div *ngFor="let item of customer.items" class="border-t border-[#EAEEF7] px-3 py-3 flex items-center gap-5">
+              <span class="font-medium text-black text-[12px]">Nov 16 <span class="text-[#62748E] font-normal">10:00 am</span></span>
+
+                <p class="font-medium text-[12px]">
+                 Page layouts look better with something in each section.
+                </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

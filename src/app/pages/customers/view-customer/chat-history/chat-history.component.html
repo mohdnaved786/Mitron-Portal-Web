@@ -1,0 +1,88 @@
+<div class="min-h-screen p-4">
+  <div *ngFor="let group of messageGroups" class="mb-6">
+    <!-- <h2 class="text-lg font-semibold mb-3">{{ group.dateLabel }}</h2> -->
+
+    <div *ngFor="let customer of group.customers" class="flex flex-col mb-4">
+      <!-- Customer Row -->
+      <div
+        class="bg-white border border-[#CAD5E2] rounded-md px-4 py-2 flex items-center justify-between cursor-pointer hover:shadow-sm transition"
+        [ngClass]="{ 'bg-[#EAEEF7] rounded-b-none': customer.showMessages }"
+        (click)="toggleFilterDropdown(customer)"
+      >
+        <div class="flex items-center gap-4">
+          <div class="w-8 h-8 rounded-full overflow-hidden">
+            <img
+              src="https://picsum.photos/200"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <span class="font-semibold text-black text-[12px]">{{
+            customer.name
+          }}</span>
+        </div>
+
+        <i
+          class="bi bi-chevron-down transition-transform duration-300"
+          [class.rotate-180]="customer.showMessages"
+        ></i>
+      </div>
+
+      <!-- Dropdown Panel -->
+      <div
+        class="overflow-hidden transition-all duration-300 ease-in-out"
+        [style.maxHeight]="customer.showMessages ? '500px' : '0'"
+        [style.opacity]="customer.showMessages ? '1' : '0'"
+      >
+        <div
+          class="bg-white border border-t-0 border-[#EAEEF7] max-h-[40vh] overflow-y-auto"
+        >
+          <!-- Loop over each day -->
+          <div *ngFor="let day of customer.items" class="px-3 py-2 flex">
+            <div class="flex basis-2/12">
+              <h3 class="text-start text-sm font-semibold mb-2">
+                {{ day.dateLabel }}
+                <div class="bg-[#7a8ea7] text-[#fff] text-xs mt-1 flex items-center gap-2 rounded-[2px] px-2 py-0.5">
+                <span class="text-xs"><i class="bi bi-card-image"></i></span>
+                <span ><i class="bi bi-camera-video"></i></span>
+                <span class="text-xs font-normal">A</span>
+              </div>
+              </h3>
+
+            </div>
+            <div class="basis-8/12">
+              <div
+                *ngFor="let msg of day.messages"
+                class="flex mb-2"
+                [ngClass]="{
+                  'justify-start': msg.sender === 'customer',
+                  'justify-end': msg.sender === 'user'
+                }"
+              >
+                <div
+                  [ngClass]="{
+                    'bg-[#FEF9EF]': msg.sender === 'customer',
+                    'bg-[#E3F1FF]': msg.sender === 'user'
+                  }"
+                  class="max-w-xs min-w-[200px] px-4 py-2 rounded-lg break-words"
+                >
+                  <p class="text-xs text-[#62748E]">{{ msg.time }}</p>
+
+                  <div *ngIf="msg.imageUrl">
+                    <img [src]="msg.imageUrl" class="max-w-full rounded mb-2" />
+                    <p *ngIf="msg.text" class="mt-1 text-sm font-medium">
+                      {{ msg.text }}
+                    </p>
+                  </div>
+
+                  <p *ngIf="!msg.imageUrl" class="mt-1 text-sm font-medium">
+                    {{ msg.text }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

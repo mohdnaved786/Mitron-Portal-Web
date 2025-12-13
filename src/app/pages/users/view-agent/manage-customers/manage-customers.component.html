@@ -1,0 +1,121 @@
+<div class="min-h-screen font-sans">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h2 class="text-gray-800 font-light text-xs">
+                <span class="font-semibold text-gray-900">5</span> customers assigned
+            </h2>
+            <!-- <p class="text-sm text-gray-500 mt-1">No filters applied</p> -->
+        </div>
+        <button class="bg-[#1DB4DE] text-[12px] text-white px-4 py-2 rounded-full hover:bg-[#1db4ded4] transition assign-btn">
+            Assign Customer
+        </button>
+    </div>
+
+    <!-- Search and Filter -->
+    <!-- <div class="flex items-center justify-end mb-4 space-x-2">
+        <div class="relative">
+            <input type="text" placeholder="Search"
+                class="border rounded-full pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-sky-400 focus:outline-none" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-5 h-5 absolute left-3 top-2.5 text-gray-400">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+        </div>
+
+        <button class="border rounded-full p-2 hover:bg-gray-100 transition text-gray-500">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M10.5 6h9.75M3.75 6h.008M6 12h9.75M3.75 12h.008M8.25 18h9.75M3.75 18h.008" />
+            </svg>
+        </button>
+    </div> -->
+
+    <div class="px-4 sm:px-6 py-[10px] flex flex-wrap items-center justify-between bg-[#eaeef7] gap-3">
+        <div class="flex flex-wrap items-center space-x-2 text-sm text-gray-500">
+            <!-- <span> Agents</span> -->
+            <!-- <span class="text-gray-400">|</span> -->
+            <span>No filters applied</span>
+        </div>
+        <div class="flex items-center space-x-2 w-full sm:w-auto">
+            <div class="relative flex-1 sm:flex-none">
+                <input type="text" placeholder="search"
+                    class="w-full pl-10 py-[4px] text-sm text-[#7a8ea7] placeholder-[#7a8ea7] border-[1.5px] border-[#7a8ea7] rounded-full focus:outline-none focus:ring-1 focus:ring-[#7a8ea7]" />
+                <span
+                    class="material-symbols-outlined w-4 h-4 text-[#7a8ea7] absolute left-3 top-1/2 transform -translate-y-1/2 text-[20px]">
+                    search
+                </span>
+            </div>
+            <button
+                class="flex items-center justify-center w-10 h-10 text-[#7a8ea7] rounded-full hover:bg-[#7a8ea742] transition-all duration-300 ease-in-out"
+                [ngClass]="{
+                'bg-[#7a8ea742]': showFilters,
+                'hover:bg-[#7a8ea742]': !showFilters
+              }" (click)="toggleFilterDropdown()">
+                <span class="material-symbols-outlined text-[24px]">filter_alt</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="overflow-hidden transition-all duration-500 ease-in-out" [style.maxHeight]="showFilters ? '200px' : '0'"
+        [style.opacity]="showFilters ? '1' : '0'">
+        <!-- Filter Dropdown -->
+        <div
+            class="bg-[#eaeef7] px-4 sm:px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row gap-5 transition-all duration-300 ease-in-out">
+            <!-- Supervisor Dropdown -->
+            <div class="flex flex-col">
+                <label for="supervisor" class="text-[10px] font-medium text-gray-700 mb-1 uppercase">Supervisor</label>
+                <select id="supervisor" (change)="applyFilters()"
+                    class="pe-20 ps-2 py-1 border-none rounded-0 text-xs focus:outline-none focus:ring-1 focus:ring-[#7a8ea7] font-semibold">
+                    <option value="">All</option>
+                    <option *ngFor="let sup of supervisors" [value]="sup">
+                        {{ sup }}
+                    </option>
+                </select>
+            </div>
+
+            <!-- Status Dropdown -->
+            <div class="flex flex-col">
+                <label for="status" class="text-[10px] font-medium text-gray-700 mb-1 uppercase">Status</label>
+                <select id="status" (change)="applyFilters()"
+                    class="pe-20 ps-2 py-1 border-none rounded-0 text-xs focus:outline-none focus:ring-1 focus:ring-[#7a8ea7] text-start font-semibold">
+                    <option value="">All</option>
+                    <option value="yes">Online</option>
+                    <option value="no">Offline</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white overflow-hidden">
+        <table class="min-w-full">
+            <thead class="text-left text-xs text-gray-600">
+                <tr>
+                    <th class="py-3 px-6 font-medium ">AGENT NAME</th>
+                    <th class="py-3 px-6 font-medium ">EMAIL</th>
+                    <th class="py-3 px-6 font-medium ">MOBILE</th>
+                    <th class="py-3 px-6 font-medium ">ACTIVE</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm text-gray-700">
+                <tr *ngFor="let customer of customers" class="border-t hover:bg-gray-50">
+                    <td class="py-3 px-6 font-semibold text-gray-800">{{ customer.name }}</td>
+                    <td class="py-3 px-6">{{ customer.email }}</td>
+                    <td class="py-3 px-6">{{ customer.mobile }}</td>
+                    <td class="py-3 px-6">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" [checked]="customer.active" />
+                            <div class="w-11 h-6 bg-gray-400 rounded-full peer-checked:bg-black transition-all"></div>
+                            <div
+                                class="absolute left-0.5 top-0.5 bg-white w-5 h-5 rounded-full peer-checked:translate-x-5 transition-all">
+                            </div>
+                        </label>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

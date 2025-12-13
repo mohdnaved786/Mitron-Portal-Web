@@ -1,0 +1,10 @@
+<!-- custom-snackbar.component.html -->
+<div class="custom-snackbar" [ngClass]="data.type">
+  <div class="message">
+    <mat-icon *ngIf="data.icon" class="message-flex items-center">{{ data.icon }}</mat-icon>
+    <span>{{ data.message }}</span>
+  </div>
+  <button mat-icon-button (click)="close()" class="flex items-center pt-1">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
