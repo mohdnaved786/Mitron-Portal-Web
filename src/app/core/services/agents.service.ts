@@ -21,11 +21,22 @@ export class AgentsService {
     const url = `${this.apiUrl}/${agentId}`;
     return this.http.put(url, agentData);
   }
-  getAgentById(id: number): Observable<any> {
+  getAgentById_old(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
   deleteAgent(agentId: number) {
-  return this.http.delete(`${this.apiUrl}/${agentId}`)
-}
+    return this.http.delete(`${this.apiUrl}/${agentId}`)
+  }
+
+
+
+
+
+
+
+  getAgentById(id: any): Observable<any> {
+    return this.http.get(`http://localhost:5000/api/users/profile/${id}`)
+  }
+
 }

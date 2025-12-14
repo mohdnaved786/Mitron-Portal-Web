@@ -151,9 +151,8 @@ export class UsersListComponent {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       data: {
-        // title: 'Delete Agent',
         title: `Delete ${agent?.role}`,
-        message: `Are you sure you want to delete ${agent.name} ${agent.last_name ? agent.last_name : ''
+        message: `Are you sure you want to delete ${agent.userName} ${agent.last_name ? agent.last_name : ''
           }?`,
         confirmBtnText: 'Delete',
       },
@@ -161,16 +160,9 @@ export class UsersListComponent {
 
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
-        this._userService.deleteUser(agent.id).subscribe({
+        this._userService.deleteUser(agent._id).subscribe({
           next: (res: any) => {
             if (res?.success === true) {
-              // this.dialog.open(AlertDialogComponent, {
-              //   data: {
-              //     type: 'success',
-              //     title: 'Deleted!',
-              //     message: res?.message || 'User soft deleted successfully.',
-              //   },
-              // });
               this.snackBar.openFromComponent(CustomSnackbarComponent, {
                 data: {
                   message: res?.message,
@@ -445,7 +437,7 @@ export class UsersListComponent {
     const payload = {
       status: agent.status === 0 ? 1 : 0,
     };
-    this._userService.updatestatus(agent.id, payload).subscribe({
+    this._userService.updateUserstatus(agent._id, payload).subscribe({
       next: (res: any) => {
         if (res?.success === true) {
           this.snackBar.openFromComponent(CustomSnackbarComponent, {
@@ -459,7 +451,7 @@ export class UsersListComponent {
             verticalPosition: 'top',
             panelClass: ['no-default-snackbar'],
           });
-          this.loadData(this.currentPage);
+          this.getUserList();
         }
       },
       error: (err) => {

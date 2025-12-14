@@ -19,12 +19,12 @@
           />
         </ng-container>
         <ng-template #headerInitials>
-          {{ getInitials(agent) }}
+          {{ getInitials(agent?.userName) }}
         </ng-template>
       </div>
 
       <h1 class="mt-2 text-xl font-semibold">
-        {{ agent?.name }} {{ agent?.last_name || "" }}
+        {{ agent?.userName }} {{ agent?.last_name || "" }}
       </h1>
       <div class="flex space-x-4 text-sm text-gray-500 mt-1">
         <div class="flex items-center space-x-1">
@@ -74,7 +74,7 @@
   >
     <div class="flex-1 py-2 border-r border-gray-300">
       <h2 class="text-sm">Customers</h2>
-      <p class="font-semibold text-lg">{{ agent?.max_players }}</p>
+      <p class="font-semibold text-lg">190</p>
     </div>
     <div class="flex-1 py-2 border-r border-gray-300">
       <h2 class="text-sm">Shift Time</h2>

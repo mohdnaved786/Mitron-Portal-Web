@@ -58,7 +58,7 @@ export class HeaderComponent {
         if (res.success === true) {
           this.userInfo = res?.user;
           this.isActiveStatus = res?.user?.active
-          console.log("this.userInfo", this.userInfo)
+          // console.log("this.userInfo", this.userInfo)
         }
       },
       error: (err) => {

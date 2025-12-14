@@ -33,6 +33,14 @@ export class UsersService {
     return this.http.put(`http://localhost:5000/api/users/profile/${userId}`, data)
   }
 
+  deleteUser(userId: any) {
+    return this.http.delete(`http://localhost:5000/api/users/${userId}`);
+  }
+
+  updateUserstatus(userId: any, data: any): Observable<any> {
+    return this.http.patch(`http://localhost:5000/api/users/${userId}/status`, data)
+  }
+
 
 
 
@@ -65,7 +73,7 @@ export class UsersService {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
-  deleteUser(userId: number) {
+  deleteUserOld(userId: number) {
     return this.http.delete(`${this.apiUrl}/${userId}`);
   }
 
