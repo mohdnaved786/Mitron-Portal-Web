@@ -62,7 +62,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
   // 🔹 Lifecycle hook: On component initialization
   ngOnInit(): void {
-    this.loadData(1);
+    // this.loadData(1);
     // this.refreshList();
     // this.startAutoRefreshCountdown();
   }
