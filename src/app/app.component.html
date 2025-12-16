@@ -1,22 +1,22 @@
 <ng-container *ngIf="isAppReady">
   <!-- Header -->
   <app-header *ngIf="!isAuthPage"></app-header>
-  <!-- <div *ngIf="isLoading" class="loading-overlay">
+  <div *ngIf="isLoading" class="loading-overlay">
     <div *ngIf="isLoading" class="spinner-img">
       <img src="./assets/images/logo.png" class="w-14 h-14" alt="">
     </div>
-  </div> -->
+  </div>
 
-  <!-- <ng-container *ngIf="isLoading$ | async as isLoading">
+  <ng-container *ngIf="isLoading$ | async as isLoading">
     <div *ngIf="isLoading" class="loading-overlay">
       <div class="spinner"></div>
     </div>
-  </ng-container> -->
+  </ng-container>
 
   <!-- Progress Bar Overlay -->
-  <!-- <div *ngIf="isLoading$ | async" class="progress-overlay">
+  <div *ngIf="isLoading$ | async" class="progress-overlay">
     <div class="progress-bar"></div>
-  </div> -->
+  </div>
 
   <!-- Router outlet -->
   <div [ngClass]="{ 'pt-[64px]': !isAuthPage }">

@@ -213,13 +213,13 @@
                         <img [src]="agent.profile_image" alt="" class="w-full h-full object-cover" />
                       </ng-container>
                       <ng-template #initials>
-                        {{ getInitials(agent) }}
+                        {{ getInitials(agent?.name) }}
                       </ng-template>
                     </div>
                     <span
                       class="absolute top-[2px] right-[3px] block w-2 h-2 rounded-full border border-[#fff]  border-[1.5px] "
                       [ngStyle]="{
-                        backgroundColor: statusColor(agent.status)
+                        backgroundColor: statusColor(agent.online)
                       }"></span>
                   </div>
                   <div>
@@ -230,30 +230,31 @@
                   </div>
                 </td>
 
-                <td class="px-6 py-4">{{ agent.nickname ?? "NA" }}</td>
+                <td class="px-6 py-4">{{ agent.name ?? "NA" }}</td>
                 <td class="px-6 py-4">
-                  {{ agent.team }}
+                  {{ agent.team ?? "N/A" }}
                 </td>
-                <td class="px-6 py-4">{{ agent.supervisor ?? "NA" }}</td>
+                <td class="px-6 py-4">{{ agent.supervisor ?? "N/A" }}</td>
                 <td class="px-6 py-4">
                   <span class="px-1 py-0.5 rounded border-[1.5px] bg-[#E5E7EB] text-gray-700">
-                    {{ agent.max_players }}
+                    {{ agent.max_players ?? "N/A" }}
                   </span>
                 </td>
                 <td class="px-6 py-4">
                   <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-md" [ngClass]="{
-                      'status-online': agent.status === 1,
-                      'status-offline': agent.status === 0
+                      'status-online': agent.online === 1,
+                      'status-offline': agent.online === 0
                     }">
-                    {{ agent.status === 1 ? "ONLINE" : "OFFLINE" }}
+                    {{ agent.online === 1 ? "ONLINE" : "OFFLINE" }}
                   </span>
                 </td>
                 <td class="px-6 py-4 text-gray-500">
-                  {{ agent.updated_at | date : "dd MMM yyyy" }} &nbsp;
-                  {{ agent.updated_at | date : "hh:mm a" }}
+                  {{ agent.updatedAt | date : "dd MMM yyyy" }} &nbsp;
+                  {{ agent.updatedAt | date : "hh:mm a" }}
                 </td>
                 <td class="px-6 py-4 text-right agents-menu">
-                  <button [matMenuTriggerFor]="menu" class="text-gray-400 hover:text-gray-600 focus:outline-none" (click)="toggleOverlay(agent)">
+                  <button [matMenuTriggerFor]="menu" class="text-gray-400 hover:text-gray-600 focus:outline-none"
+                    (click)="toggleOverlay(agent)">
                     <span class="material-symbols-outlined">more_vert</span>
                   </button>
 
@@ -262,7 +263,7 @@
                       <mat-icon class="menu-icon !text-[20px]">edit</mat-icon>
                       <span>Edit</span>
                     </button>
-                    <button mat-menu-item class="menu-item" (click)="openViewAgentPage(agent.id)">
+                    <button mat-menu-item class="menu-item" (click)="openViewAgentPage(agent._id)">
                       <mat-icon class="menu-icon">visibility</mat-icon>
                       <span>View</span>
                     </button>
@@ -271,14 +272,14 @@
                         $event.stopPropagation(); toggleAgentStatus(agent)
                       ">
                       <mat-icon class="menu-icon" [ngStyle]="{
-                          color: agent.status !== 1 ? '#43a047' : '#e53935'
+                          color: agent.online !== 1 ? '#43a047' : '#e53935'
                         }">
-                        {{ agent.status !== 1 ? "toggle_on" : "toggle_off" }}
+                        {{ agent.online !== 1 ? "toggle_on" : "toggle_off" }}
                       </mat-icon>
                       <span [style.color]="
-                          agent.status !== 1 ? '#43a047' : '#e53935'
+                          agent.online !== 1 ? '#43a047' : '#e53935'
                         ">
-                        {{ agent.status !== 1 ? "Online" : "Offline" }}
+                        {{ agent.online !== 1 ? "Online" : "Offline" }}
                       </span>
                     </button>
                   </mat-menu>
@@ -289,7 +290,11 @@
                   class="absolute inset-0 bg-gradient-to-r from-cyan-300 via-green-400 via-yellow-200 to-red-300 opacity-30 pointer-events-none z-0">
                 </div>
               </tr>
-
+              <tr *ngIf="items.length === 0" class="table-row">
+                <div class="text-red-500 font-bold text-center py-4">
+                  No records found.
+                </div>
+              </tr>
 
             </tbody>
 

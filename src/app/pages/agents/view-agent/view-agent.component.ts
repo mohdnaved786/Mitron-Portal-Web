@@ -27,7 +27,7 @@ export class ViewAgentComponent {
   constructor(
     private route: ActivatedRoute,
     private agentsService: AgentsService
-  ) {}
+  ) { }
 
   onToggleChange(event: any) {
     this.isActive = event.checked;
@@ -47,18 +47,18 @@ export class ViewAgentComponent {
   }
 
   ngOnInit() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const id = this.route.snapshot.paramMap.get('id');
     if (id) this.loadAgentDetails(id);
   }
 
-  loadAgentDetails(id: number) {
-    this.agentsService.getAgentById(id).subscribe({
+  loadAgentDetails(id: any) {
+    this.agentsService.getAgentByIdNew(id).subscribe({
       next: (res: any) => {
         if (res.success) {
-          this.agent = res.data;
+          this.agent = res.agent;
           // Handle online status
           this.isActive =
-            res.data.isOnline === 'yes' || res.data.isOnline === true;
+            res.agent.online === 1 ? true : false;
           console.log('Agent data:', this.agent);
         }
       },
@@ -66,9 +66,21 @@ export class ViewAgentComponent {
     });
   }
 
-  getInitials(agent: any): string {
-    const first = agent?.name?.charAt(0).toUpperCase() ?? '';
-    const last = agent?.last_name?.charAt(0).toUpperCase() ?? '';
-    return first + last || '?';
+  // getInitials(agent: any): string {
+  //   const first = agent?.name?.charAt(0).toUpperCase() ?? '';
+  //   const last = agent?.last_name?.charAt(0).toUpperCase() ?? '';
+  //   return first + last || '?';
+  // }
+
+  getInitials(name: string | undefined): string {
+    if (!name) return '?';
+    const words = name.trim().split(/\s+/);
+    const initials: string[] = [];
+    for (let word of words) {
+      const firstChar = word.charAt(0).toUpperCase();
+      if (/[A-Z]/.test(firstChar)) initials.push(firstChar);
+      if (initials.length === 2) break;
+    }
+    return initials.length > 0 ? initials.join('') : '?';
   }
 }

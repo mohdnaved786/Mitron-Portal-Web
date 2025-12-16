@@ -8,6 +8,8 @@ import { AuthService } from '../../core/services/auth.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { UsersService } from '../../core/services/users.service';
 import { DashboardService } from '../../core/services/dashboard.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CommonOtpPopupComponent } from '../popup/common-otp-popup/common-otp-popup.component';
 
 @Component({
   selector: 'app-header',
@@ -27,7 +29,7 @@ export class HeaderComponent {
   userInfo: any;
 
 
-  constructor(public router: Router, public authService: AuthService, private _userService: UsersService, private dashboardService: DashboardService) {
+  constructor(public router: Router, public authService: AuthService, private _userService: UsersService, private dashboardService: DashboardService, private _dialog: MatDialog) {
     const loggedData = sessionStorage.getItem("loginUser");
     if (loggedData != null) {
       this.loggedUser = JSON.parse(loggedData);
@@ -76,6 +78,20 @@ export class HeaderComponent {
 
   closeSidebar() {
     this.sidebarOpen = false;
+  }
+
+  validateOtp(linkUrl: string) {
+    this.sidebarOpen = false;
+    const dialogRef = this._dialog.open(CommonOtpPopupComponent, {
+      data: {
+        linkName: linkUrl
+      }
+    })
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+
+      }
+    })
   }
 
   isActive(path: string): boolean {

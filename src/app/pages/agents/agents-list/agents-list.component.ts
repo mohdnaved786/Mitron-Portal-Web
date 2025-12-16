@@ -17,6 +17,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { UsersService } from '../../../core/services/users.service';
 import { CustomSnackbarComponent } from '../../../shared/components/custom-snackbar/custom-snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-agents-list',
@@ -34,6 +35,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class AgentsListComponent {
   // Pagination and data properties
+  unSubscribeSubject: any = new Subject();
   agent: any;
   isActive: boolean = false;
   items: any[] = [];
@@ -59,11 +61,27 @@ export class AgentsListComponent {
     private dialog: MatDialog,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private _agentService: AgentsService
   ) { }
 
   ngOnInit(): void {
-    this.loadData(1);
+    // this.loadData(1);
+    this.getAgentList();
+  }
+
+  getAgentList() {
+    this.agentsService.getAgentList().pipe(takeUntil(this.unSubscribeSubject)).subscribe({
+      next: ((res) => {
+        if (res?.success === true) {
+          this.items = res?.agents
+          this.allItems = res?.agents
+        }
+      }),
+      error: ((err) => {
+
+      })
+    })
   }
   toggleArrow() {
     this.isArrowOpen = !this.isArrowOpen;
@@ -97,8 +115,8 @@ export class AgentsListComponent {
   // }
 
   editAgent(agent?: any) {
-    const agentId = agent?.id;
-    this._userSerice.getUserById(agentId).subscribe({
+    const agentId = agent?._id;
+    this._agentService.getAgentByIdNew(agentId).subscribe({
       next: (res) => {
         if (res?.success === true) {
           const dialogRef = this.dialog.open(AddEditAgentsComponent, {
@@ -362,17 +380,28 @@ export class AgentsListComponent {
     return status === 1 ? '#64bcac' : '#e45c64';
   }
   // image initials
-  getInitials(agent: any): string {
-    const first = agent?.name?.charAt(0).toUpperCase() ?? '';
-    const last = agent?.last_name?.charAt(0).toUpperCase() ?? '';
-    return first + last || 'NA';
+  // getInitials(agent: any): string {
+  //   const first = agent?.name?.charAt(0).toUpperCase() ?? '';
+  //   const last = agent?.last_name?.charAt(0).toUpperCase() ?? '';
+  //   return first + last || 'NA';
+  // }
+  getInitials(name: string | undefined): string {
+    if (!name) return '?';
+    const words = name.trim().split(/\s+/);
+    const initials: string[] = [];
+    for (let word of words) {
+      const firstChar = word.charAt(0).toUpperCase();
+      if (/[A-Z]/.test(firstChar)) initials.push(firstChar);
+      if (initials.length === 2) break;
+    }
+    return initials.length > 0 ? initials.join('') : '?';
   }
   isOverflowing(el: HTMLElement, maxWidth: number = 250): boolean {
     return el.scrollWidth > maxWidth;
   } // 🔹 Active/Inactive Toggle
   toggleAgentStatus_old(agent: any): void {
-    alert(agent.status);
-    agent.status = !agent.status;
+    alert(agent.online);
+    agent.online = !agent.online;
     this.cdr.detectChanges();
 
     console.log(
@@ -381,7 +410,7 @@ export class AgentsListComponent {
 
     // Optional backend call
     const payload = {
-      status: agent.active ? 1 : 0,
+      online: agent.active ? 1 : 0,
     };
     return;
     this._userSerice.updatestatus(agent.id, payload).subscribe({
@@ -402,7 +431,7 @@ export class AgentsListComponent {
         isAgent: true,
         agent: agent,
         title: 'Are you Sure?',
-        message: `Are you sure you want to ${agent.status === 0 ? 'online' : 'offline'
+        message: `Are you sure you want to ${agent.online === 0 ? 'online' : 'offline'
           }?`,
         confirmBtnText: 'YES',
         cancelBtnText: 'NO',
@@ -412,9 +441,9 @@ export class AgentsListComponent {
     dialogRef.afterClosed().subscribe((isConfirmed) => {
       if (isConfirmed) {
         const payload = {
-          status: agent.status === 0 ? 1 : 0,
+          online: agent.online === 0 ? 1 : 0,
         };
-        this._userSerice.updatestatus(agent.id, payload).subscribe({
+        this._agentService.updateAgentOnlineStatus(agent._id, payload).subscribe({
           next: (res: any) => {
             if (res?.success === true) {
               this.snackBar.openFromComponent(CustomSnackbarComponent, {
@@ -428,7 +457,7 @@ export class AgentsListComponent {
                 verticalPosition: 'top',
                 panelClass: ['no-default-snackbar'],
               });
-              this.loadData(this.currentPage);
+              this.getAgentList();
             }
           },
           error: (err) => {
@@ -447,13 +476,13 @@ export class AgentsListComponent {
   }
 
   toggleOverlay(agent: any) {
-  // Hide overlay on all other rows first if you want
-  this.items.forEach(a => {
-    if (a !== agent) a.showOverlay = false;
-  });
+    // Hide overlay on all other rows first if you want
+    this.items.forEach(a => {
+      if (a !== agent) a.showOverlay = false;
+    });
 
-  // Toggle the clicked row
-  agent.showOverlay = !agent.showOverlay;
-}
+    // Toggle the clicked row
+    agent.showOverlay = !agent.showOverlay;
+  }
 
 }

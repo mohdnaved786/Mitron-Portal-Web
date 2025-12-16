@@ -10,6 +10,35 @@ export class AgentsService {
   private apiUrl = `${environment.base_url}/agents`
   constructor(private http: HttpClient) { }
 
+
+
+  getAgentList(): Observable<any> {
+    return this.http.get('http://localhost:5000/api/agents/getAllAgents')
+  }
+
+  updateAgentOnlineStatus(agentId: any, data: any): Observable<any> {
+    return this.http.patch(`http://localhost:5000/api/agents/${agentId}/online`, data)
+  }
+
+  getAgentByIdNew(Agentid: any): Observable<any> {
+    return this.http.get(`http://localhost:5000/api/agents/getAgentById/${Agentid}`)
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   getAgents(page: number = 1): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/?page=${page}`);
   }

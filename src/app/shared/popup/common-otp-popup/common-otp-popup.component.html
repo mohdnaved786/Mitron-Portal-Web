@@ -1,0 +1,81 @@
+<div class="flex items-center justify-center">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
+
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">
+            OTP Verification
+        </h2>
+        <p class="text-center text-gray-500 mb-6">
+            Choose where to receive your OTP
+        </p>
+
+        <!-- Radio Buttons -->
+        <mat-radio-group [(ngModel)]="selectedOption" class="flex justify-center gap-6 mb-6">
+            <mat-radio-button value="mobile">
+                Mobile
+            </mat-radio-button>
+
+            <mat-radio-button value="email">
+                Email
+            </mat-radio-button>
+        </mat-radio-group>
+
+        <!-- OTP Inputs -->
+        <div class="otpClasss" [formGroup]="form">
+            <div class="flex gap-3 justify-center">
+                <input #otp1 type="text" formControlName="otp1" maxlength="1" inputmode="numeric" class="otp-input"
+                    (keyup)="moveFocus(otp1, otp2)" (keydown)="handleBackspace($event, otp1, null)" />
+
+                <input #otp2 type="text" formControlName="otp2" maxlength="1" class="otp-input"
+                    (keyup)="moveFocus(otp2, otp3)" (keydown)="handleBackspace($event, otp2, otp1)" />
+
+                <input #otp3 type="text" formControlName="otp3" maxlength="1" class="otp-input"
+                    (keyup)="moveFocus(otp3, otp4)" (keydown)="handleBackspace($event, otp3, otp2)" />
+
+                <input #otp4 type="text" formControlName="otp4" maxlength="1" class="otp-input"
+                    (keyup)="moveFocus(otp4, otp5)" (keydown)="handleBackspace($event, otp4, otp3)" />
+
+                <input #otp5 type="text" formControlName="otp5" maxlength="1" class="otp-input"
+                    (keyup)="moveFocus(otp5, otp6)" (keydown)="handleBackspace($event, otp5, otp4)" />
+
+                <input #otp6 type="text" formControlName="otp6" maxlength="1" class="otp-input"
+                    (keyup)="moveFocus(otp6, null)" (keydown)="handleBackspace($event, otp6, otp5)" />
+            </div>
+        </div>
+
+
+        <!-- Timer -->
+        <div class="text-center text-sm text-gray-600 mb-4">
+            <span *ngIf="!canResend">
+                Resend OTP in <span class="font-semibold">{{ timer }}</span> seconds
+            </span>
+        </div>
+
+        <!-- Verify Button -->
+        <div class="flex gap-7">
+            <button (click)="verifyOtp()"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-semibold transition">
+                Verify OTP
+            </button>
+
+            <button [disabled]="canResend" (click)="resendOtp()" class="w-full py-3 rounded-lg font-semibold transition
+         bg-indigo-600 hover:bg-indigo-700 text-white
+         disabled:bg-gray-400 disabled:cursor-not-allowed
+         disabled:hover:bg-gray-400">
+                Resend OTP
+            </button>
+
+
+            <!-- <button
+  [disabled]="canResend"
+  (click)="!canResend && resendOtp()"
+  class="w-full py-3 rounded-lg font-semibold transition
+         bg-indigo-600 hover:bg-indigo-700 text-white
+         disabled:bg-gray-400 disabled:cursor-not-allowed">
+  Resend OTP
+</button> -->
+
+
+        </div>
+
+    </div>
+</div>
