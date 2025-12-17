@@ -83,6 +83,7 @@ export class LoginComponent {
           sessionStorage.setItem('userId', res.user.id)
           this.loginError = 'Login Successful';
           this.zone.run(() => this.router.navigate(['/dashboard']));
+          this.startSessionTimer();
           // this.router.navigate(['/dashboard']);
         } else {
           this.loginError = 'Invalid email/password';
@@ -104,5 +105,10 @@ export class LoginComponent {
 
   get f() {
     return this.loginForm.controls;
+  }
+
+  startSessionTimer() {
+    const loginTime = Date.now();
+    localStorage.setItem('loginTime', loginTime.toString());
   }
 }

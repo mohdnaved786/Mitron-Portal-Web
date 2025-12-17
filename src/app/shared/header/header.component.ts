@@ -1,5 +1,5 @@
 import { CommonModule, NgClass, NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -17,7 +17,12 @@ import { CommonOtpPopupComponent } from '../popup/common-otp-popup/common-otp-po
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
+  elapsedTime = '00:00:00';
+  private timerInterval: any;
+
+
+
   sidebarOpen = false;
   isActiveStatus: boolean = false;
   loggedUser: any;
@@ -48,6 +53,10 @@ export class HeaderComponent {
 
   ngOnInit() {
     this.getUserProfile();
+    const savedLoginTime = localStorage.getItem('loginTime');
+    if (savedLoginTime) {
+      // this.startTimer(+savedLoginTime);
+    }
   }
 
 
@@ -85,11 +94,17 @@ export class HeaderComponent {
     const dialogRef = this._dialog.open(CommonOtpPopupComponent, {
       data: {
         linkName: linkUrl
-      }
+      },
+      disableClose: true,
+      backdropClass: 'otp-backdrop'
     })
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-
+        if (linkUrl === 'dashboard') {
+          this.router.navigate(['/dashboard']);
+        } else if (linkUrl === 'users') {
+          this.router.navigate(['/users'])
+        }
       }
     })
   }
@@ -101,6 +116,30 @@ export class HeaderComponent {
   onToggleChange(event: any) {
     this.isActiveStatus = event.checked;
     console.log('Agent active state:', this.isActiveStatus);
+  }
+
+  startTimer(loginTime: number) {
+    this.timerInterval = setInterval(() => {
+      const diff = Date.now() - loginTime;
+      this.elapsedTime = this.formatTime(diff);
+    }, 1000);
+  }
+
+  formatTime(ms: number): string {
+    const totalSeconds = Math.floor(ms / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
+  }
+
+  pad(num: number): string {
+    return num.toString().padStart(2, '0');
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.timerInterval);
   }
 
 

@@ -1,6 +1,13 @@
 <div class="flex items-center justify-center">
     <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
 
+        <!-- Close Icon -->
+        <button mat-icon-button class="absolute top-4 right-4
+             text-gray-400 hover:text-gray-600
+             transition cursor-pointer" (click)="closeDialog()">
+            <mat-icon>close</mat-icon>
+        </button>
+
         <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">
             OTP Verification
         </h2>
@@ -9,7 +16,9 @@
         </p>
 
         <!-- Radio Buttons -->
-        <mat-radio-group [(ngModel)]="selectedOption" (change)="chooseVal($event)" class="flex justify-center gap-6 mb-6">
+        <mat-radio-group [(ngModel)]="selectedOption" (change)="chooseVal($event)"
+            class="flex items-center justify-center gap-6 mb-6">
+
             <mat-radio-button value="mobile">
                 Mobile
             </mat-radio-button>
@@ -17,13 +26,26 @@
             <mat-radio-button value="email">
                 Email
             </mat-radio-button>
+
+            <!-- Send OTP Icon Button -->
+            <button *ngIf="showSendIcon" mat-icon-button matTooltipClass="otp-tooltip" matTooltip="Send OTP"
+                matTooltipPosition="above" class="ml-2 mb-3 flex items-center justify-center
+           text-blue-600 hover:text-blue-700
+           transition-transform duration-200
+           hover:scale-110" (click)="getOtp()">
+                <mat-icon class="rotate-[-45deg] text-2xl">
+                    send
+                </mat-icon>
+            </button>
+
         </mat-radio-group>
+
 
         <!-- OTP Inputs -->
         <div class="otpClasss" [formGroup]="form">
             <div class="flex gap-3 justify-center">
                 <input #otp1 type="text" formControlName="otp1" maxlength="1" inputmode="numeric" class="otp-input"
-                    (keyup)="moveFocus(otp1, otp2)" (keydown)="handleBackspace($event, otp1, null)" />
+                    (keyup)="moveFocus(otp1, otp2)" (paste)="handlePaste($event)" (keydown)="handleBackspace($event, otp1, null)" />
 
                 <input #otp2 type="text" formControlName="otp2" maxlength="1" class="otp-input"
                     (keyup)="moveFocus(otp2, otp3)" (keydown)="handleBackspace($event, otp2, otp1)" />
@@ -52,12 +74,14 @@
 
         <!-- Verify Button -->
         <div class="flex gap-7">
-            <button (click)="verifyOtp()"
-                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-semibold transition">
+            <button (click)="verifyOtp()" [disabled]="this.form.invalid" class="w-full py-3 rounded-lg font-semibold transition
+         bg-indigo-600 hover:bg-indigo-700 text-white
+         disabled:bg-gray-400 disabled:cursor-not-allowed
+         disabled:hover:bg-gray-400">
                 Verify OTP
             </button>
 
-            <button [disabled]="canResend" (click)="resendOtp()" class="w-full py-3 rounded-lg font-semibold transition
+            <button *ngIf="showResend" [disabled]="canResend" (click)="resendOtp()" class="w-full py-3 rounded-lg font-semibold transition
          bg-indigo-600 hover:bg-indigo-700 text-white
          disabled:bg-gray-400 disabled:cursor-not-allowed
          disabled:hover:bg-gray-400">

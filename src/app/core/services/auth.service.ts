@@ -49,6 +49,7 @@ export class AuthService {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         sessionStorage.removeItem('token');
+        localStorage.removeItem('loginTime');
         this.router.navigate(['/login']);
       }
     });

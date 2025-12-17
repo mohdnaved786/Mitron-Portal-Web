@@ -82,6 +82,11 @@
   <!-- Right Section -->
   <div class="flex items-center gap-7">
 
+    <div class="text-sm font-semibold text-gray-700">
+      Session Time: {{ elapsedTime }}
+    </div>
+
+
     <!-- Slide Toggle -->
     <mat-slide-toggle [checked]="isActiveStatus" (change)="onToggleChange($event)" class="flex-row-reverse"
       [ngClass]="{ 'active-toggle': isActiveStatus, 'inactive-toggle': !isActiveStatus }">
@@ -162,8 +167,8 @@
   class="fixed top-16 left-0 h-[calc(100%-4rem)] w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 flex flex-col min-h-screen sidebar-font"
   [ngClass]="{ '-translate-x-full': !sidebarOpen }">
   <nav class="px-3 py-2 space-y-2 flex-1 overflow-auto text-sm">
-    <!-- Dashboard -->
-    <a routerLink="/dashboard" (click)="validateOtp('dashboard')"
+    <!-- Dashboard  (click)="validateOtp('dashboard')" -->
+    <a routerLink="/dashboard" (click)="closeSidebar()"
       class="flex items-center gap-3 p-2 rounded-lg text-black font-medium transition" [ngClass]="
         isActive('/dashboard')
           ? 'bg-gradient-to-r from-cyan-300 via-green-400 via-yellow-200 to-red-300 text-black shadow   hover:bg-gray-700'
@@ -261,9 +266,9 @@
       Reports
     </a>
 
-    <!-- Users -->
-    <a routerLink="/users" (click)="closeSidebar()"
-      class="flex items-center gap-3 p-2 rounded-lg text-black font-medium transition" [ngClass]="
+    <!-- Users routerLink="/users" -->
+    <a (click)="validateOtp('users')"
+      class="flex items-center gap-3 p-2 rounded-lg text-black font-medium transition cursor-pointer" [ngClass]="
         isActive('/users')
           ? 'bg-gradient-to-r from-cyan-300 via-green-400 via-yellow-200 to-red-300 text-black shadow   hover:bg-gray-700'
           : 'text-black hover:bg-gray-100'
