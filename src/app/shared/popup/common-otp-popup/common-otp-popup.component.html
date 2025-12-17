@@ -9,7 +9,7 @@
         </p>
 
         <!-- Radio Buttons -->
-        <mat-radio-group [(ngModel)]="selectedOption" class="flex justify-center gap-6 mb-6">
+        <mat-radio-group [(ngModel)]="selectedOption" (change)="chooseVal($event)" class="flex justify-center gap-6 mb-6">
             <mat-radio-button value="mobile">
                 Mobile
             </mat-radio-button>
@@ -44,8 +44,8 @@
 
 
         <!-- Timer -->
-        <div class="text-center text-sm text-gray-600 mb-4">
-            <span *ngIf="!canResend">
+        <div class="text-center text-sm text-gray-600 mb-4 mt-5">
+            <span *ngIf="showTimer">
                 Resend OTP in <span class="font-semibold">{{ timer }}</span> seconds
             </span>
         </div>

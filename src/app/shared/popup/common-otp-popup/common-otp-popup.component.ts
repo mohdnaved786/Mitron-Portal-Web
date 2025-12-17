@@ -3,6 +3,10 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
 import { CommonValidators } from '../../validators/common-validators';
+import { OtpService } from '../../../core/services/otp.service';
+import { Subject, takeUntil } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CustomSnackbarComponent } from '../../components/custom-snackbar/custom-snackbar.component';
 
 @Component({
   selector: 'app-common-otp-popup',
@@ -11,7 +15,14 @@ import { CommonValidators } from '../../validators/common-validators';
   styleUrl: './common-otp-popup.component.css'
 })
 export class CommonOtpPopupComponent {
-  constructor(private _fb: FormBuilder) {
+  unSubscribeSubject: any = new Subject();
+  form: FormGroup | any;
+  timer = 10;
+  interval: any;
+  canResend = true;
+  selectedOption = '';
+  showTimer: boolean = false;
+  constructor(private _fb: FormBuilder, private _otpService: OtpService, private snackBar: MatSnackBar) {
     this.form = this._fb.group({
 
       otp1: ['', [Validators.required, CommonValidators.onlyAllowNumbers()]],
@@ -23,11 +34,7 @@ export class CommonOtpPopupComponent {
     });
 
   }
-  form: FormGroup | any;
-  timer = 10;
-  interval: any;
-  canResend = true;
-  selectedOption = '';
+
 
   ngOnInit() {
     this.startTimer();
@@ -45,6 +52,7 @@ export class CommonOtpPopupComponent {
       this.timer--;
       if (this.timer === 0) {
         this.canResend = false;
+        this.showTimer = false;
         clearInterval(this.interval);
       }
     }, 1000);
@@ -69,6 +77,38 @@ export class CommonOtpPopupComponent {
     }
   }
 
+  chooseVal(event: any) {
+    if (event?.value) {
+      const payload = {
+        email: "naved@gmail.com",
+        purpose: "verification"
+      }
+
+      this._otpService.getOtp(payload).pipe(takeUntil(this.unSubscribeSubject)).subscribe({
+        next: ((res) => {
+          if (res?.success === true) {
+            this.showTimer = true;
+            this.startTimer();
+            this.snackBar.openFromComponent(CustomSnackbarComponent, {
+              data: {
+                message: res?.message,
+                type: 'success',
+                icon: 'check_circle',
+              },
+              duration: 4000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              panelClass: ['no-default-snackbar'],
+            });
+          }
+        }),
+        error: ((err) => {
+
+        })
+      })
+    }
+  }
+
 
 
   verifyOtp() {
@@ -77,6 +117,7 @@ export class CommonOtpPopupComponent {
 
   resendOtp() {
     this.startTimer();
+    this.showTimer = true;
   }
 
 }
